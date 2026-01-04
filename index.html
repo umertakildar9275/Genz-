@@ -2,144 +2,145 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genz Closet | Premium Fashion</title>
+    <title>Genz Closet | Shop Now</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
+
     <style>
         .dark { background-color: #121212; color: white; }
-        .dark .card { background-color: #1e1e1e; border: 1px solid #333; }
+        .card { transition: transform 0.2s; }
+        .card:active { transform: scale(0.98); }
         .gold-btn { background: linear-gradient(135deg, #FFD700, #B8860B); color: white; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body id="body" class="bg-gray-50 transition-all duration-300 font-sans">
+<body id="body" class="bg-gray-50 font-sans">
 
-    <div id="login-screen" class="fixed inset-0 bg-white z-[5000] flex flex-col items-center justify-center p-8">
-        <h1 class="text-4xl font-black mb-2 italic tracking-tighter text-center">GENZ <span class="text-yellow-600">CLOSET</span></h1>
-        <p class="text-gray-500 mb-8 text-center text-sm">Experience the New Style</p>
-        <div id="recaptcha-container" class="mb-4"></div>
-        <input type="tel" id="phone" placeholder="+91 Enter Number" class="w-full max-w-sm p-4 bg-gray-100 rounded-2xl mb-4 text-center font-bold outline-none border-none shadow-inner">
-        <button onclick="sendOTP()" id="send-btn" class="w-full max-w-sm bg-black text-white py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition">Get OTP</button>
-
-        <div id="otp-box" class="hidden mt-6 w-full max-w-sm">
-            <input type="number" id="otp" placeholder="000000" class="w-full p-4 bg-gray-100 rounded-2xl mb-4 text-center tracking-[10px] font-black outline-none border-none">
-            <button onclick="verifyOTP()" class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-bold shadow-lg">Verify & Enter Shop</button>
+    <div id="login-screen" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center p-6">
+        <h1 class="text-5xl font-black mb-1 italic text-black">GENZ <span class="text-yellow-600">CLOSET</span></h1>
+        <p class="text-gray-400 mb-8 font-medium">Verified Fashion for You</p>
+        
+        <div id="recaptcha-container"></div>
+        
+        <div class="w-full max-w-sm space-y-4">
+            <input type="tel" id="phone" placeholder="Enter Phone Number" class="w-full p-5 bg-gray-100 rounded-3xl text-center font-bold text-lg outline-none border-2 border-transparent focus:border-yellow-500 transition">
+            <button onclick="sendOTP()" id="send-btn" class="w-full bg-black text-white py-5 rounded-3xl font-black text-lg shadow-2xl">GET OTP</button>
+            
+            <div id="otp-box" class="hidden animate-bounce-in">
+                <input type="number" id="otp" placeholder="000000" class="w-full p-5 bg-gray-100 rounded-3xl text-center tracking-[15px] font-black text-2xl outline-none border-2 border-yellow-500 mb-4">
+                <button onclick="verifyOTP()" class="w-full bg-yellow-500 text-black py-5 rounded-3xl font-black text-lg shadow-xl">VERIFY & ENTER</button>
+            </div>
         </div>
     </div>
 
-    <div id="main-app" class="hidden pb-24">
-        <nav class="p-4 flex justify-between items-center sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b shadow-sm">
-            <h2 class="font-black text-2xl italic tracking-tighter">GENZ <span class="text-yellow-600">CLOSET</span></h2>
-            <div class="flex gap-5 items-center">
-                <button onclick="toggleTheme()" class="text-xl"><i id="theme-icon" class="fa-solid fa-moon"></i></button>
+    <div id="main-app" class="hidden">
+        <nav class="p-4 flex justify-between items-center sticky top-0 bg-white/90 backdrop-blur-md z-50 border-b">
+            <h2 class="font-black text-2xl italic">GZ <span class="text-yellow-600">CLOSET</span></h2>
+            <div class="flex gap-4 items-center">
+                <button onclick="document.body.classList.toggle('dark')"><i class="fa-solid fa-circle-half-stroke text-xl"></i></button>
                 <div class="relative cursor-pointer" onclick="toggleCart()">
-                    <i class="fa-solid fa-cart-shopping text-xl"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                    <i class="fa-solid fa-bag-shopping text-2xl"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-2 bg-red-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                 </div>
             </div>
         </nav>
 
-        <div class="p-4">
-            <input type="text" onkeyup="searchProduct()" id="search" placeholder="Search Style..." class="w-full p-4 bg-gray-100 rounded-2xl border-none outline-none card shadow-sm">
-        </div>
-
-        <div id="product-list" class="grid grid-cols-2 gap-4 px-4">
-            <div class="product-card card bg-white p-2 rounded-3xl shadow-md border border-gray-100 overflow-hidden text-center">
-                <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500" class="rounded-2xl h-48 w-full object-cover">
+        <div class="p-4 grid grid-cols-2 gap-4" id="products">
+            <div class="bg-white p-2 rounded-3xl shadow-md border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400" class="rounded-2xl h-44 w-full object-cover">
                 <div class="p-2">
-                    <h3 class="font-bold text-sm">Premium Black Tee</h3>
-                    <p class="text-yellow-600 font-black">₹699</p>
-                    <select id="size-1" class="w-full mt-2 p-1 text-xs border rounded-lg bg-gray-50 outline-none card">
-                        <option>S</option><option>M</option><option>L</option><option>XL</option>
-                    </select>
-                    <button onclick="addToCart('Premium Black Tee', 699, 'size-1')" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-xs font-bold active:scale-95 transition">Add to Cart</button>
+                    <h3 class="font-bold text-sm">Oversized Tee</h3>
+                    <p class="text-yellow-600 font-black">₹799</p>
+                    <button onclick="addToCart('Oversized Tee', 799)" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-xs font-bold">Add to Cart</button>
                 </div>
             </div>
-            <div class="product-card card bg-white p-2 rounded-3xl shadow-md border border-gray-100 overflow-hidden text-center">
-                <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=500" class="rounded-2xl h-48 w-full object-cover">
+            <div class="bg-white p-2 rounded-3xl shadow-md border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=400" class="rounded-2xl h-44 w-full object-cover">
                 <div class="p-2">
-                    <h3 class="font-bold text-sm">Baggy Blue Jeans</h3>
+                    <h3 class="font-bold text-sm">Baggy Jeans</h3>
                     <p class="text-yellow-600 font-black">₹1,499</p>
-                    <select id="size-2" class="w-full mt-2 p-1 text-xs border rounded-lg bg-gray-50 outline-none card">
-                        <option>30</option><option>32</option><option>34</option>
-                    </select>
-                    <button onclick="addToCart('Baggy Blue Jeans', 1499, 'size-2')" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-xs font-bold active:scale-95 transition">Add to Cart</button>
+                    <button onclick="addToCart('Baggy Jeans', 1499)" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-xs font-bold">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="cart-modal" class="fixed inset-0 bg-black/60 z-[6000] hidden flex justify-end">
-        <div class="w-full max-w-xs bg-white h-full p-6 flex flex-col shadow-2xl transition-all">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-black">Shopping Bag</h2>
+    <div id="cart-modal" class="fixed inset-0 bg-black/70 z-[10000] hidden flex justify-end">
+        <div class="w-full max-w-xs bg-white h-full p-6 flex flex-col">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-black">My Bag</h2>
                 <button onclick="toggleCart()" class="text-3xl">&times;</button>
             </div>
-            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 no-scrollbar"></div>
-            <div class="pt-4 border-t">
-                <div class="flex justify-between font-bold text-xl mb-6">
-                    <span>Total Sum:</span>
-                    <span id="cart-total" class="text-yellow-600">₹0</span>
+            <div id="cart-items" class="flex-1 space-y-4 overflow-y-auto"></div>
+            <div class="pt-6 border-t mt-auto">
+                <div class="flex justify-between text-2xl font-black mb-6">
+                    <span>Total:</span>
+                    <span id="cart-total">₹0</span>
                 </div>
-                <button onclick="sendOrder()" class="w-full gold-btn py-4 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 active:scale-95 transition">
-                    <i class="fa-brands fa-whatsapp text-xl"></i> Order via WhatsApp
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 text-white py-5 rounded-3xl font-black text-lg flex items-center justify-center gap-3">
+                    <i class="fa-brands fa-whatsapp"></i> Order Now
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // ASLI CORRECT CONFIGURATION
+        // FIREBASE SETUP - UPDATED FROM YOUR SCREENSHOT
         const firebaseConfig = {
             apiKey: "AIzaSyD7I1d61hXsaeAHgVxbbVMgKHKvorrX6z8",
             authDomain: "genz-food-login.firebaseapp.com",
             projectId: "genz-food-login",
-            storageBucket: "genz-food-login.firebasestorage.app",
+            storageBucket: "genz-food-login.appspot.com",
             messagingSenderId: "729506686882",
-            appId: "1:729506686882:web:8a980e144e04b8475bb4fb",
-            measurementId: "G-6RELNDZBWE"
+            appId: "1:729506686882:web:8a980e144e04b8475bb4fb"
         };
         firebase.initializeApp(firebaseConfig);
 
         let cart = [];
 
         function sendOTP() {
-            const num = document.getElementById('phone').value;
-            if(num.length < 10) return alert("Pehle sahi number daalein!");
+            const phoneNumber = "+91" + document.getElementById('phone').value;
             const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
-            firebase.auth().signInWithPhoneNumber("+91" + num, appVerifier).then(res => {
-                window.confirmationResult = res;
-                document.getElementById('otp-box').classList.remove('hidden');
-                document.getElementById('send-btn').classList.add('hidden');
-                alert("OTP bhej diya gaya hai!");
-            }).catch(err => alert("Galti: " + err.message));
+            
+            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+                .then(confirmationResult => {
+                    window.confirmationResult = confirmationResult;
+                    document.getElementById('otp-box').classList.remove('hidden');
+                    document.getElementById('send-btn').classList.add('hidden');
+                    alert("OTP Sent!");
+                }).catch(error => {
+                    alert("Galti: " + error.message);
+                });
         }
 
         function verifyOTP() {
             const code = document.getElementById('otp').value;
             confirmationResult.confirm(code).then(() => {
-                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-app').classList.remove('hidden');
             }).catch(() => alert("Galat OTP!"));
         }
 
-        function addToCart(name, price, sizeId) {
-            const size = document.getElementById(sizeId).value;
-            cart.push({name, price, size});
-            updateUI();
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateCart();
+            alert("Added to Bag!");
         }
 
-        function updateUI() {
-            const container = document.getElementById('cart-items');
-            let total = 0; container.innerHTML = "";
-            cart.forEach((item, i) => {
+        function updateCart() {
+            const list = document.getElementById('cart-items');
+            let total = 0;
+            list.innerHTML = "";
+            cart.forEach((item, index) => {
                 total += item.price;
-                container.innerHTML += `<div class="p-3 bg-gray-50 rounded-2xl flex justify-between items-center border">
-                    <div><p class="font-bold text-sm">${item.name} (${item.size})</p><p class="text-yellow-600 text-xs">₹${item.price}</p></div>
-                    <button onclick="cart.splice(${i},1);updateUI()" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                list.innerHTML += `<div class="p-4 bg-gray-100 rounded-2xl flex justify-between items-center">
+                    <div><p class="font-bold">${item.name}</p><p class="text-sm">₹${item.price}</p></div>
+                    <button onclick="cart.splice(${index},1);updateCart()" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
                 </div>`;
             });
             document.getElementById('cart-count').innerText = cart.length;
@@ -148,21 +149,12 @@
 
         function toggleCart() { document.getElementById('cart-modal').classList.toggle('hidden'); }
 
-        function sendOrder() {
+        function sendWhatsAppOrder() {
             if(cart.length === 0) return alert("Bag khali hai!");
-            let msg = "👕 *NEW ORDER - GENZ CLOSET* 👕\n\n";
-            cart.forEach(item => msg += `• ${item.name} | Size: ${item.size} | ₹${item.price}\n`);
-            msg += `\n*Grand Total:* ${document.getElementById('cart-total').innerText}`;
-            window.open(`https://wa.me/917385009275?text=${encodeURIComponent(msg)}`);
-        }
-
-        function searchProduct() {
-            let q = document.getElementById('search').value.toLowerCase();
-            document.querySelectorAll('.product-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none");
-        }
-
-        function toggleTheme() {
-            document.getElementById('body').classList.toggle('dark');
+            let message = "👕 *GENZ CLOSET ORDER* 👕\n\n";
+            cart.forEach(i => message += `• ${i.name} - ₹${i.price}\n`);
+            message += `\n*Grand Total:* ${document.getElementById('cart-total').innerText}`;
+            window.open(`https://wa.me/917385009275?text=${encodeURIComponent(message)}`);
         }
     </script>
 </body>
