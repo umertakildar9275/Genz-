@@ -8,96 +8,101 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
-
     <style>
         .dark { background-color: #121212; color: white; }
         .dark .card { background-color: #1e1e1e; border: 1px solid #333; }
-        .dark .bg-white { background-color: #121212 !important; color: white; }
-        .gold-gradient { background: linear-gradient(135deg, #FFD700, #B8860B); }
+        .gold-btn { background: linear-gradient(135deg, #FFD700, #B8860B); color: white; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body id="body" class="bg-gray-50 transition-all duration-300">
+<body id="body" class="bg-gray-50 transition-all duration-300 font-sans">
 
     <div id="login-screen" class="fixed inset-0 bg-white z-[5000] flex flex-col items-center justify-center p-8">
-        <h1 class="text-4xl font-black mb-2">GENZ <span class="text-yellow-600">CLOSET</span></h1>
-        <p class="text-gray-500 mb-8 text-center">Login with Phone for Exclusive Deals</p>
+        <h1 class="text-4xl font-black mb-2 italic tracking-tighter text-center">GENZ <span class="text-yellow-600">CLOSET</span></h1>
+        <p class="text-gray-500 mb-8 text-center text-sm">Real Fashion for the New Gen</p>
         <div id="recaptcha-container" class="mb-4"></div>
-        <input type="tel" id="phone" placeholder="Enter Phone Number" class="w-full max-w-sm p-4 bg-gray-100 rounded-2xl mb-4 text-center font-bold outline-none focus:ring-2 focus:ring-yellow-500 border-none">
-        <button onclick="sendOTP()" id="send-btn" class="w-full max-w-sm bg-black text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition">Get OTP</button>
+        <input type="tel" id="phone" placeholder="+91 Enter Number" class="w-full max-w-sm p-4 bg-gray-100 rounded-2xl mb-4 text-center font-bold outline-none border-none shadow-inner">
+        <button onclick="sendOTP()" id="send-btn" class="w-full max-w-sm bg-black text-white py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition">Get OTP</button>
 
         <div id="otp-box" class="hidden mt-6 w-full max-w-sm">
-            <input type="number" id="otp" placeholder="Enter 6-Digit OTP" class="w-full p-4 bg-gray-100 rounded-2xl mb-4 text-center tracking-[10px] font-black outline-none border-none">
-            <button onclick="verifyOTP()" class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-bold shadow-lg">Verify & Enter</button>
+            <input type="number" id="otp" placeholder="000000" class="w-full p-4 bg-gray-100 rounded-2xl mb-4 text-center tracking-[10px] font-black outline-none border-none">
+            <button onclick="verifyOTP()" class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-bold shadow-lg">Verify & Enter Shop</button>
         </div>
     </div>
 
     <div id="main-app" class="hidden pb-24">
-        <header class="p-4 flex justify-between items-center sticky top-0 bg-white/80 backdrop-blur-md z-50 shadow-sm">
-            <h2 class="font-black text-2xl">GZ <span class="text-yellow-600">CLOSET</span></h2>
-            <div class="flex gap-4 items-center">
+        <nav class="p-4 flex justify-between items-center sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b shadow-sm">
+            <h2 class="font-black text-2xl italic tracking-tighter">GENZ <span class="text-yellow-600">CLOSET</span></h2>
+            <div class="flex gap-5 items-center">
                 <button onclick="toggleTheme()" class="text-xl"><i id="theme-icon" class="fa-solid fa-moon"></i></button>
                 <div class="relative cursor-pointer" onclick="toggleCart()">
                     <i class="fa-solid fa-cart-shopping text-xl"></i>
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
                 </div>
             </div>
-        </header>
+        </nav>
 
         <div class="p-4">
             <div class="relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-gray-400"></i>
-                <input type="text" onkeyup="searchProduct()" id="search" placeholder="Search Style..." class="w-full p-4 pl-12 bg-gray-100 rounded-2xl border-none outline-none card">
+                <input type="text" onkeyup="searchProduct()" id="search" placeholder="Search Jackets, Shirts, Jeans..." class="w-full p-4 pl-12 bg-gray-100 rounded-2xl border-none outline-none card shadow-sm">
             </div>
         </div>
 
-        <div id="product-list" class="grid grid-cols-2 gap-4 px-4 mt-4">
-            <div class="product-card card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
-                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500" class="h-48 w-full object-cover">
-                <div class="p-3">
-                    <h3 class="font-bold text-sm truncate">Oversized T-Shirt</h3>
-                    <p class="text-yellow-600 font-black">₹599</p>
-                    <button onclick="addToCart('Oversized T-Shirt', 599)" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-xs font-bold active:scale-95 transition">Add to Cart</button>
+        <div id="product-list" class="grid grid-cols-2 gap-4 px-4">
+            <div class="product-card card bg-white p-2 rounded-3xl shadow-md border border-gray-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500" class="rounded-2xl h-48 w-full object-cover">
+                <div class="p-2">
+                    <h3 class="font-bold text-sm truncate">Premium Black Tee</h3>
+                    <p class="text-yellow-600 font-black">₹699</p>
+                    <select id="size-1" class="w-full mt-2 p-1 text-xs border rounded-lg bg-gray-50 outline-none card">
+                        <option>S</option><option>M</option><option>L</option><option>XL</option>
+                    </select>
+                    <button onclick="addToCart('Premium Black Tee', 699, 'size-1')" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-xs font-bold active:scale-95 transition">Add to Cart</button>
                 </div>
             </div>
-            <div class="product-card card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
-                <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=500" class="h-48 w-full object-cover">
-                <div class="p-3">
-                    <h3 class="font-bold text-sm truncate">Blue Denim Jeans</h3>
-                    <p class="text-yellow-600 font-black">₹1,299</p>
-                    <button onclick="addToCart('Blue Denim Jeans', 1299)" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-xs font-bold active:scale-95 transition">Add to Cart</button>
+
+            <div class="product-card card bg-white p-2 rounded-3xl shadow-md border border-gray-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=500" class="rounded-2xl h-48 w-full object-cover">
+                <div class="p-2">
+                    <h3 class="font-bold text-sm truncate">Blue Baggy Jeans</h3>
+                    <p class="text-yellow-600 font-black">₹1,499</p>
+                    <select id="size-2" class="w-full mt-2 p-1 text-xs border rounded-lg bg-gray-50 outline-none card">
+                        <option>30</option><option>32</option><option>34</option><option>36</option>
+                    </select>
+                    <button onclick="addToCart('Blue Baggy Jeans', 1499, 'size-2')" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-xs font-bold active:scale-95 transition">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="cart-modal" class="fixed inset-0 bg-black/50 z-[6000] hidden flex justify-end">
-        <div class="w-4/5 max-w-xs bg-white h-full p-6 shadow-2xl flex flex-col">
+    <div id="cart-modal" class="fixed inset-0 bg-black/60 z-[6000] hidden flex justify-end">
+        <div class="w-full max-w-xs bg-white h-full p-6 flex flex-col shadow-2xl transition-all">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-black">Your Cart</h2>
-                <button onclick="toggleCart()" class="text-2xl">&times;</button>
+                <h2 class="text-2xl font-black">My Shopping Bag</h2>
+                <button onclick="toggleCart()" class="text-3xl">&times;</button>
             </div>
-            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 no-scrollbar">
+            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 no-scrollbar"></div>
+            <div class="pt-4 border-t">
+                <div class="flex justify-between font-bold text-xl mb-6">
+                    <span>Total Sum:</span>
+                    <span id="cart-total" class="text-yellow-600">₹0</span>
                 </div>
-            <div class="border-t pt-4 mt-4">
-                <div class="flex justify-between font-bold text-xl mb-4">
-                    <span>Total:</span>
-                    <span id="cart-total">₹0</span>
-                </div>
-                <button onclick="sendOrder()" class="w-full gold-gradient text-white py-4 rounded-2xl font-bold shadow-lg">Order via WhatsApp</button>
+                <button onclick="sendOrder()" class="w-full gold-btn py-4 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 active:scale-95 transition">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Order via WhatsApp
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Firebase Config (Keep using yours)
         const firebaseConfig = {
             apiKey: "AIzaSyD7I1d61hXsaeAHgVxbbVMgKHKvorrX6z8",
             authDomain: "genz-food-login.firebaseapp.com",
             projectId: "genz-food-login",
             storageBucket: "genz-food-login.firebasestorage.app",
             messagingSenderId: "729506686882",
-            appId: "1:729506686882:web:a418eb81413c28665bb4fb"
+            appId: "1:729506686882:web:8a980e144e04b8475bb4fb"
         };
         firebase.initializeApp(firebaseConfig);
 
@@ -105,11 +110,14 @@
 
         function sendOTP() {
             const num = document.getElementById('phone').value;
+            if(num.length < 10) return alert("Valid number daalo bhai!");
             const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
             firebase.auth().signInWithPhoneNumber("+91" + num, appVerifier).then(res => {
                 window.confirmationResult = res;
                 document.getElementById('otp-box').classList.remove('hidden');
-            }).catch(err => alert(err.message));
+                document.getElementById('send-btn').classList.add('hidden');
+                alert("OTP Bhej Diya Hai!");
+            }).catch(err => alert("Galti: " + err.message));
         }
 
         function verifyOTP() {
@@ -117,55 +125,45 @@
             confirmationResult.confirm(code).then(() => {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-app').classList.remove('hidden');
-            }).catch(() => alert("Galat OTP!"));
+            }).catch(() => alert("Galat OTP hai!"));
         }
 
-        function addToCart(name, price) {
-            cart.push({name, price});
-            updateCartUI();
+        function addToCart(name, price, sizeId) {
+            const size = document.getElementById(sizeId).value;
+            cart.push({name, price, size});
+            updateUI();
         }
 
-        function updateCartUI() {
+        function updateUI() {
             const container = document.getElementById('cart-items');
-            const count = document.getElementById('cart-count');
-            const total = document.getElementById('cart-total');
-            
-            container.innerHTML = '';
-            let totalSum = 0;
-            
-            cart.forEach((item, index) => {
-                totalSum += item.price;
+            let total = 0; container.innerHTML = "";
+            cart.forEach((item, i) => {
+                total += item.price;
                 container.innerHTML += `
-                    <div class="flex justify-between items-center card p-3 rounded-xl border">
-                        <div><p class="font-bold text-sm">${item.name}</p><p class="text-yellow-600">₹${item.price}</p></div>
-                        <button onclick="removeFromCart(${index})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-                    </div>`;
+                <div class="p-3 bg-gray-50 rounded-2xl flex justify-between items-center border card">
+                    <div><p class="font-bold text-sm">${item.name} (${item.size})</p><p class="text-yellow-600 text-xs">₹${item.price}</p></div>
+                    <button onclick="cart.splice(${i},1);updateUI()" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
             });
-            
-            count.innerText = cart.length;
-            total.innerText = "₹" + totalSum;
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-total').innerText = "₹" + total;
         }
 
         function toggleCart() { document.getElementById('cart-modal').classList.toggle('hidden'); }
 
         function sendOrder() {
-            if(cart.length === 0) return alert("Cart khali hai!");
-            let msg = "🔥 *NEW ORDER - GENZ CLOSET* 🔥\n\n";
-            cart.forEach(item => msg += `• ${item.name} - ₹${item.price}\n`);
-            msg += `\n*Grand Total:* ${document.getElementById('cart-total').innerText}`;
-            window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(msg)}`);
+            if(cart.length === 0) return alert("Pehle kuch choose toh karlo!");
+            let msg = "👕 *NEW ORDER - GENZ CLOSET* 👕\n\n";
+            cart.forEach(item => msg += `• ${item.name} | Size: ${item.size} | ₹${item.price}\n`);
+            msg += `\n*Grand Total:* ${document.getElementById('cart-total').innerText}\n\n*Customer Number:* ${firebase.auth().currentUser.phoneNumber}`;
+            
+            // TERA UPDATED NUMBER YAHAN HAI
+            window.open(`https://wa.me/917385009275?text=${encodeURIComponent(msg)}`);
         }
 
         function searchProduct() {
-            let input = document.getElementById('search').value.toLowerCase();
-            document.querySelectorAll('.product-card').forEach(card => {
-                card.style.display = card.innerText.toLowerCase().includes(input) ? "block" : "none";
-            });
+            let q = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.product-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none");
         }
 
         function toggleTheme() {
@@ -175,3 +173,4 @@
     </script>
 </body>
 </html>
+
