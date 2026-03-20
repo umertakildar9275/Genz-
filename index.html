@@ -639,3 +639,570 @@
 
         .footer-bottom {
             border-top: 1px solid rgba(255,
+padding: var(--spacing-md) 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--clr-gray);
+        }
+        @media (min-width: 768px) {
+            .footer-bottom { flex-direction: row; }
+        }
+        .footer-bottom-links {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+        .footer-bottom-links a:hover { color: var(--clr-white); }
+        
+        .lang-selector {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .lang-selector:hover { color: var(--clr-white); }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Toast Notification -->
+    <div id="toast-container">Message appears here</div>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        Complimentary Global Shipping on Orders Over $500
+    </div>
+
+    <!-- Sticky Header -->
+    <header class="header" id="main-header">
+        <div class="container header-inner">
+            <div class="header-left">
+                <button class="icon-btn" id="open-menu" aria-label="Open Menu">
+                    <i class="ph ph-list"></i>
+                </button>
+            </div>
+            <div class="header-center">
+                <a href="#" class="logo serif uppercase">Aura</a>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" aria-label="Search" onclick="showToast('Search functionality coming soon.')">
+                    <i class="ph ph-magnifying-glass"></i>
+                </button>
+                <button class="icon-btn" aria-label="Cart" onclick="showToast('Your cart is empty.')">
+                    <i class="ph ph-shopping-bag"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Full Screen Mobile Menu -->
+    <nav class="mobile-menu" id="mobile-menu">
+        <div class="menu-header">
+            <button class="icon-btn" id="close-menu" aria-label="Close Menu">
+                <i class="ph ph-x"></i>
+            </button>
+        </div>
+        <div class="menu-content">
+            <ul class="menu-links sans uppercase">
+                <li class="menu-item">
+                    <div class="menu-link-wrapper" onclick="closeMenuAndScroll('#hero')">
+                        <span>Home</span>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <div class="menu-link-wrapper" onclick="toggleSubmenu(this)">
+                        Shop <i class="ph ph-caret-right"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="#new-arrivals" onclick="closeMenu()">New Arrivals</a></li>
+                        <li><a href="#categories" onclick="closeMenu()">Ready to Wear</a></li>
+                        <li><a href="#" onclick="showToast('Navigating to Accessories'); closeMenu()">Accessories</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <div class="menu-link-wrapper" onclick="toggleSubmenu(this)">
+                        Collections <i class="ph ph-caret-right"></i>
+                    </div>
+                    <ul class="submenu">
+                        <li><a href="#" onclick="showToast('Loading Fall/Winter'); closeMenu()">Fall/Winter 24</a></li>
+                        <li><a href="#" onclick="showToast('Loading Spring/Summer'); closeMenu()">Spring/Summer 24</a></li>
+                        <li><a href="#" onclick="showToast('Loading Essentials'); closeMenu()">The Essentials</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <div class="menu-link-wrapper" onclick="closeMenuAndScroll('#our-story')">
+                        <span>Our Story</span>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="menu-footer">
+                <div class="menu-footer-links">
+                    <a href="#" onclick="showToast('Opening Account Login'); closeMenu()">My Account</a>
+                    <a href="#" onclick="showToast('Opening Order Tracker'); closeMenu()">Track Order</a>
+                    <div class="lang-selector" style="margin-top: 10px;" onclick="showToast('Location selector opened'); closeMenu()">
+                        <i class="ph ph-globe"></i> United States (USD $)
+                    </div>
+                </div>
+                <div class="social-icons">
+                    <a href="#" class="icon-btn"><i class="ph ph-instagram-logo"></i></a>
+                    <a href="#" class="icon-btn"><i class="ph ph-tiktok-logo"></i></a>
+                    <a href="#" class="icon-btn"><i class="ph ph-linkedin-logo"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" alt="Fashion Model" class="hero-bg">
+            <div class="hero-overlay"></div>
+            <div class="hero-content fade-in-up animate-on-scroll">
+                <span class="hero-subtitle sans">The New Standard</span>
+                <h1 class="hero-title serif text-4xl">Elevated Essentials for the Modern Wardrobe.</h1>
+                <button class="btn btn-primary" onclick="document.getElementById('new-arrivals').scrollIntoView({behavior: 'smooth'})">Explore Collection</button>
+            </div>
+        </section>
+
+        <!-- Product Showcase (Horizontal Slider) -->
+        <section id="new-arrivals" class="section-padding container">
+            <div class="section-header flex flex-col items-center text-center fade-in-up animate-on-scroll" style="margin-bottom: var(--spacing-lg);">
+                <h2 class="serif text-2xl mb-2">New Arrivals</h2>
+                <a href="#" class="sans text-sm uppercase" style="border-bottom: 1px solid var(--clr-black); padding-bottom: 2px;" onclick="showToast('Loading all products...')">View All</a>
+            </div>
+
+            <div class="slider-wrapper fade-in-up animate-on-scroll">
+                <!-- Data attributes used by JS to identify corresponding indicator -->
+                <div class="slider-container" id="product-slider" data-indicator="product-indicator">
+                    
+                    <!-- Product Card 1 -->
+                    <div class="product-card" onclick="showToast('Viewing Cashmere Blend Coat')">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=1887&auto=format&fit=crop" alt="Cashmere Coat" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title serif">The Cashmere Blend Coat</h3>
+                            <span class="product-price sans">$895</span>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 2 -->
+                    <div class="product-card" onclick="showToast('Viewing Silk Slip Dress')">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1515347619152-16b110b4226a?q=80&w=2070&auto=format&fit=crop" alt="Silk Dress" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title serif">Signature Silk Slip</h3>
+                            <span class="product-price sans">$450</span>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 3 -->
+                    <div class="product-card" onclick="showToast('Viewing Structured Blazer')">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=1887&auto=format&fit=crop" alt="Blazer" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title serif">Tailored Wool Blazer</h3>
+                            <span class="product-price sans">$620</span>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 4 -->
+                    <div class="product-card" onclick="showToast('Viewing Leather Tote')">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1915&auto=format&fit=crop" alt="Leather Bag" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title serif">Minimalist Leather Tote</h3>
+                            <span class="product-price sans">$550</span>
+                        </div>
+                    </div>
+                    
+                     <!-- Product Card 5 -->
+                     <div class="product-card" onclick="showToast('Viewing Pleated Trousers')">
+                        <div class="product-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1887&auto=format&fit=crop" alt="Trousers" class="product-image" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title serif">Wide Leg Pleated Trouser</h3>
+                            <span class="product-price sans">$380</span>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Dynamic Scroll Indicator -->
+                <div class="scroll-indicator-track">
+                    <div class="scroll-indicator-bar" id="product-indicator"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Story / Philosophy -->
+        <section id="our-story" class="story-section section-padding">
+            <div class="container story-grid">
+                <div class="story-image-wrapper fade-in-up animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop" alt="Atelier" class="story-image" loading="lazy">
+                </div>
+                <div class="story-content fade-in-up animate-on-scroll" style="transition-delay: 0.2s;">
+                    <span class="sans text-xs uppercase" style="color: var(--clr-gray); display: block; margin-bottom: var(--spacing-sm);">Philosophy</span>
+                    <h2 class="serif text-4xl" style="margin-bottom: var(--spacing-md); line-height: 1.2;">Artistry in Every Thread.</h2>
+                    <p class="sans" style="margin-bottom: var(--spacing-lg); color: var(--clr-gray);">
+                        We believe that true luxury lies in subtlety and exceptional craftsmanship. Every piece in our collection is thoughtfully designed to transcend seasons, created using ethically sourced materials and constructed by master artisans. It is not just clothing; it is an extension of your persona.
+                    </p>
+                    <button class="btn btn-secondary" onclick="showToast('Navigating to full story page...')">Discover Our Atelier</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Slider -->
+        <section id="categories" class="section-padding container">
+            <div class="section-header fade-in-up animate-on-scroll">
+                <h2 class="serif text-2xl text-center">Curated Collections</h2>
+            </div>
+            
+            <div class="slider-wrapper fade-in-up animate-on-scroll">
+                <div class="slider-container" id="category-slider" data-indicator="category-indicator">
+                    
+                    <div class="category-card" onclick="showToast('Loading Outerwear Collection')">
+                        <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop" alt="Outerwear" class="category-image" loading="lazy">
+                        <div class="category-overlay">
+                            <h3 class="category-title serif">Outerwear</h3>
+                        </div>
+                    </div>
+
+                    <div class="category-card" onclick="showToast('Loading Knitwear Collection')">
+                        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1972&auto=format&fit=crop" alt="Knitwear" class="category-image" loading="lazy">
+                        <div class="category-overlay">
+                            <h3 class="category-title serif">Knitwear</h3>
+                        </div>
+                    </div>
+
+                    <div class="category-card" onclick="showToast('Loading Accessories')">
+                        <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1915&auto=format&fit=crop" alt="Accessories" class="category-image" loading="lazy">
+                        <div class="category-overlay">
+                            <h3 class="category-title serif">Accessories</h3>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="scroll-indicator-track">
+                    <div class="scroll-indicator-bar" id="category-indicator"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Icons Section -->
+        <section class="trust-section">
+            <div class="container trust-grid">
+                <div class="trust-item fade-in-up animate-on-scroll">
+                    <i class="ph ph-globe-hemisphere-west trust-icon"></i>
+                    <h4 class="sans text-sm uppercase">Global Shipping</h4>
+                    <p class="sans text-xs" style="color: var(--clr-gray);">Complimentary over $500</p>
+                </div>
+                <div class="trust-item fade-in-up animate-on-scroll" style="transition-delay: 0.1s;">
+                    <i class="ph ph-arrow-u-up-left trust-icon"></i>
+                    <h4 class="sans text-sm uppercase">Free Returns</h4>
+                    <p class="sans text-xs" style="color: var(--clr-gray);">Within 30 days</p>
+                </div>
+                <div class="trust-item fade-in-up animate-on-scroll" style="transition-delay: 0.2s;">
+                    <i class="ph ph-leaf trust-icon"></i>
+                    <h4 class="sans text-sm uppercase">Sustainable</h4>
+                    <p class="sans text-xs" style="color: var(--clr-gray);">Ethically sourced</p>
+                </div>
+                <div class="trust-item fade-in-up animate-on-scroll" style="transition-delay: 0.3s;">
+                    <i class="ph ph-package trust-icon"></i>
+                    <h4 class="sans text-sm uppercase">Bespoke Packaging</h4>
+                    <p class="sans text-xs" style="color: var(--clr-gray);">Signature presentation</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter-section section-padding container fade-in-up animate-on-scroll">
+            <h2 class="serif text-2xl mb-2">Join The Inner Circle</h2>
+            <p class="sans text-sm" style="color: var(--clr-gray); margin-bottom: var(--spacing-lg);">Subscribe to receive updates, access to exclusive deals, and more.</p>
+            
+            <form class="newsletter-form" id="newsletter-form">
+                <input type="email" placeholder="Enter your email address" class="newsletter-input" required aria-label="Email address">
+                <button type="submit" class="newsletter-btn" aria-label="Subscribe">
+                    <i class="ph ph-arrow-right"></i>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand Info -->
+                <div class="footer-brand">
+                    <a href="#" class="logo serif uppercase text-xl text-white" style="color: var(--clr-white);">Aura</a>
+                    <p class="sans text-sm">Defining modern luxury through minimalist design and uncompromising quality.</p>
+                </div>
+                  <!-- Accordion/Grid Columns -->
+                <div class="footer-col" onclick="toggleFooterAccordion(this)">
+                    <h4 class="sans">Shop <i class="ph ph-plus"></i><i class="ph ph-minus"></i></h4>
+                    <div class="footer-links">
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">New Arrivals</a>
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Ready to Wear</a>
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Accessories</a>
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Gift Cards</a>
+                    </div>
+                </div>
+
+                <div class="footer-col" onclick="toggleFooterAccordion(this)">
+                    <h4 class="sans">Explore <i class="ph ph-plus"></i><i class="ph ph-minus"></i></h4>
+                    <div class="footer-links">
+                        <a href="#" onclick="event.stopPropagation(); document.getElementById('our-story').scrollIntoView({behavior: 'smooth'})">Our Story</a>
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Sustainability</a>
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Journal</a>
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Careers</a>
+                    </div>
+                </div>
+
+                <div class="footer-col" onclick="toggleFooterAccordion(this)">
+                    <h4 class="sans">Support <i class="ph ph-plus"></i><i class="ph ph-minus"></i></h4>
+                    <div class="footer-links">
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">FAQ</a>
+                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Shipping & Returns</a>
+                        <!-- Clickable contact links -->
+                        <a href="mailto:concierge@aurastudios.com" onclick="event.stopPropagation();">concierge@aurastudios.com</a>
+                        <a href="tel:+18005550199" onclick="event.stopPropagation();">+1 800 555 0199</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="lang-selector" onclick="showToast('Language & Region settings opened.')">
+                    <i class="ph ph-globe"></i> EN / USD
+                </div>
+                <div class="footer-bottom-links">
+                    <a href="#" onclick="showToast('Terms opened')">Terms</a>
+                    <a href="#" onclick="showToast('Privacy Policy opened')">Privacy</a>
+                    <a href="#" onclick="showToast('Cookies policy opened')">Cookies</a>
+                </div>
+                <p>&copy; 2024 Aura Studios. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        // ==========================================
+        // UI Utility: Custom Toast Message
+        // ==========================================
+        function showToast(message) {
+            const toast = document.getElementById('toast-container');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==========================================
+        // Mobile Menu Logic
+        // ==========================================
+        const menuBtn = document.getElementById('open-menu');
+        const closeBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function openMenu() {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeMenu() {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeMenuAndScroll(targetId) {
+            closeMenu();
+            setTimeout(() => {
+                const target = document.querySelector(targetId);
+                if(target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 400); // Wait for menu close animation
+        }
+
+        menuBtn.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+
+        // Submenu Toggle within Mobile Menu
+        function toggleSubmenu(element) {
+            const parentItem = element.closest('.menu-item');
+            const submenu = parentItem.querySelector('.submenu');
+            
+            // Close other open submenus
+            document.querySelectorAll('.menu-item.active').forEach(item => {
+                if (item !== parentItem) {
+                    item.classList.remove('active');
+                    item.querySelector('.submenu').style.maxHeight = null;
+                }
+            });
+
+            // Toggle current
+            parentItem.classList.toggle('active');
+            if (parentItem.classList.contains('active')) {
+                submenu.style.maxHeight = submenu.scrollHeight + "px";
+            } else {
+                submenu.style.maxHeight = null;
+            }
+        }
+
+        // ==========================================
+        // Sticky Header Effect
+        // ==========================================
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // ==========================================
+        // Scroll Animations (Intersection Observer)
+        // ==========================================
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ==========================================
+        // Footer Accordion (Mobile Only)
+        // ==========================================
+        function toggleFooterAccordion(col) {
+            if (window.innerWidth >= 768) return; // Disable on desktop
+            
+            // Close others
+            document.querySelectorAll('.footer-col').forEach(c => {
+                if (c !== col) c.classList.remove('active');
+            });
+            
+            col.classList.toggle('active');
+        }
+        
+        // ==========================================
+        // Slider Drag & Scroll Indicator Logic
+        // ==========================================
+        const sliders = document.querySelectorAll('.slider-container');
+
+        sliders.forEach(slider => {
+            // Update indicator bar
+            const indicatorId = slider.getAttribute('data-indicator');
+            const indicatorBar = document.getElementById(indicatorId);
+
+            const updateIndicator = () => {
+                // Calculate percentage scrolled
+                const scrollLeft = slider.scrollLeft;
+                const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                let scrollPercent = (scrollLeft / maxScrollLeft) * 100;
+                
+                // Adjust width of bar. Base width is proportional to visible area.
+                const visibleRatio = slider.clientWidth / slider.scrollWidth;
+                const baseWidthPercent = visibleRatio * 100;
+                
+                // Map scroll percent to available track width
+                const availableTrackPercent = 100 - baseWidthPercent;
+                const translatePercent = (scrollPercent / 100) * availableTrackPercent;
+                
+                indicatorBar.style.width = `${baseWidthPercent}%`;
+                indicatorBar.style.transform = `translateX(${translatePercent * (100 / baseWidthPercent)}%)`;
+            };
+
+            // Init and bind scroll event
+            updateIndicator();
+            slider.addEventListener('scroll', updateIndicator);
+            window.addEventListener('resize', updateIndicator);
+
+            // Desktop Drag to Scroll logic
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            let isDragging = false; // Flag to differentiate drag vs click
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                isDragging = false;
+                slider.style.cursor = 'grabbing';
+                // Remove snap during drag for smooth experience
+                slider.style.scrollSnapType = 'none';
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.style.cursor = 'grab';
+                slider.style.scrollSnapType = 'x mandatory';
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.style.cursor = 'grab';
+                slider.style.scrollSnapType = 'x mandatory';
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2; // Scroll speed multiplier
+                if (Math.abs(walk) > 5) isDragging = true; // Mark as dragging if moved significantly
+                slider.scrollLeft = scrollLeft - walk;
+            });
+
+            // Prevent firing click events on cards if user was dragging
+            const cards = slider.querySelectorAll('.product-card, .category-card');
+            cards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (isDragging) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                }, true); // Use capture phase
+            });
+        });
+
+        // ==========================================
+        // Newsletter Form Submit
+        // ==========================================
+        document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            if(email) {
+                showToast(`Thank you! ${email} has been added to our list.`);
+                e.target.reset();
+            }
+        });
+
+    </script>
+</body>
+</html>
