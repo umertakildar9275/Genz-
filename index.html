@@ -1,1207 +1,774 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA | Premium Minimalist Luxury</title>
-    
-    <!-- Google Fonts: Playfair Display (Serif) and Inter (Sans-Serif) -->
+    <title>The-Lit | Premium Apparel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
-    <!-- Phosphor Icons for high-end minimalist icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        premium: {
+                            50: '#fcfcfc',
+                            100: '#f5f5f5',
+                            200: '#e5e5e5',
+                            800: '#222222',
+                            900: '#111111',
+                        }
+                    },
+                    transitionTimingFunction: {
+                        'lux': 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* ==========================================================================
-           1. CSS VARIABLES & RESET
-           ========================================================================== */
-        :root {
-            /* Color Palette */
-            --clr-cream: #FDFBF7;
-            --clr-beige: #F5F2EA;
-            --clr-black: #1A1A1A;
-            --clr-white: #FFFFFF;
-            --clr-gray: #737373;
-            --clr-light-gray: #E5E5E5;
-            
-            /* Typography */
-            --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Inter', sans-serif;
-            
-            /* Spacing & Layout */
-            --header-height: 70px;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 2rem;
-            --spacing-xl: 4rem;
-            
-            /* Transitions */
-            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }
-
-        body {
-            font-family: var(--font-sans);
-            background-color: var(--clr-cream);
-            color: var(--clr-black);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        /* ==========================================================================
-           2. TYPOGRAPHY & UTILITIES
-           ========================================================================== */
-        .serif { font-family: var(--font-serif); }
-        .sans { font-family: var(--font-sans); }
+        /* Custom Styles & Animations */
+        body { -webkit-font-smoothing: antialiased; }
         
-        .text-xs { font-size: 0.75rem; letter-spacing: 0.05em; }
-        .text-sm { font-size: 0.875rem; }
-        .text-base { font-size: 1rem; }
-        .text-lg { font-size: 1.25rem; }
-        .text-xl { font-size: 1.5rem; }
-        .text-2xl { font-size: 2rem; }
-        .text-4xl { font-size: clamp(2.5rem, 5vw, 4rem); }
-        
-        .uppercase { text-transform: uppercase; letter-spacing: 0.1em; }
-        .text-center { text-align: center; }
-        
-        /* Layout Utilities */
-        .container {
-            width: 100%;
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-md);
-        }
-        @media (min-width: 768px) {
-            .container { padding: 0 var(--spacing-lg); }
-        }
+        /* Hide scrollbar for clean look but keep functionality */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f5f5f5; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 
-        .section-padding {
-            padding: var(--spacing-xl) 0;
-        }
-        @media (min-width: 768px) {
-            .section-padding { padding: calc(var(--spacing-xl) * 2) 0; }
-        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* Animations */
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .fade-in-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Message Toast */
-        #toast-container {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background-color: var(--clr-black);
-            color: var(--clr-white);
-            padding: 12px 24px;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            z-index: 1000;
-            opacity: 0;
-            transition: var(--transition-smooth);
-            pointer-events: none;
-            text-align: center;
-            min-width: 250px;
-        }
-        #toast-container.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        /* ==========================================================================
-           3. HEADER & NAVIGATION
-           ========================================================================== */
-        .announcement-bar {
-            background-color: var(--clr-black);
-            color: var(--clr-white);
-            text-align: center;
-            padding: 8px var(--spacing-md);
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .header {
-            position: sticky;
-            top: 0;
-            background-color: rgba(253, 251, 247, 0.95);
-            backdrop-filter: blur(10px);
-            height: var(--header-height);
-            display: flex;
-            align-items: center;
-            z-index: 100;
-            border-bottom: 1px solid transparent;
-            transition: var(--transition-smooth);
-        }
-        .header.scrolled {
-            border-bottom: 1px solid var(--clr-light-gray);
-        }
-
-        .header-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .header-left, .header-right {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            flex: 1;
-        }
-        .header-right { justify-content: flex-end; }
-        .header-center { flex: 1; text-align: center; }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-        }
-
-        .icon-btn {
-            font-size: 1.5rem;
-            color: var(--clr-black);
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .icon-btn:hover {
-            transform: scale(1.1);
-            color: var(--clr-gray);
-        }
-
-        /* Mobile Menu Overlay */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100vh;
-            background-color: var(--clr-cream);
-            z-index: 200;
-            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-            display: flex;
-            flex-col;
-            overflow-y: auto;
-        }
-        .mobile-menu.active {
-            transform: translateX(0);
-        }
-
-        .menu-header {
-            display: flex;
-            justify-content: flex-end;
-            padding: var(--spacing-md) var(--spacing-md);
-            height: var(--header-height);
-            align-items: center;
-        }
-
-        .menu-content {
-            padding: var(--spacing-xl) var(--spacing-md);
-            display: flex;
-            flex-direction: column;
-            height: calc(100% - var(--header-height));
-        }
-
-        .menu-links {
-            flex-grow: 1;
-        }
-
-        .menu-item {
-            border-bottom: 1px solid var(--clr-light-gray);
-        }
-
-        .menu-link-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--spacing-md) 0;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .menu-link-wrapper span { transition: transform 0.3s ease; }
-        .menu-item.active .menu-link-wrapper span { transform: rotate(90deg); }
-
-        .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-            padding-left: var(--spacing-md);
-        }
+        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
         
-        .submenu li a {
-            display: block;
-            padding: var(--spacing-sm) 0;
-            font-size: 1rem;
-            color: var(--clr-gray);
-            transition: color 0.3s ease;
-        }
-        .submenu li a:hover { color: var(--clr-black); }
+        .fade-in { opacity: 0; transition: opacity 1s ease-in-out; }
+        .fade-in.visible { opacity: 1; }
 
-        .menu-footer {
-            margin-top: auto;
-            padding-top: var(--spacing-xl);
-        }
-        .menu-footer-links {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
-        }
-        .menu-footer-links a {
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+        /* Loader */
+        #loader { transition: opacity 0.5s ease; }
         
-        .social-icons { display: flex; gap: var(--spacing-md); }
-
-        /* ==========================================================================
-           4. COMPONENTS (Buttons, Cards, Sliders)
-           ========================================================================== */
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            text-align: center;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-        }
-        .btn-primary {
-            background-color: var(--clr-black);
-            color: var(--clr-white);
-            border: 1px solid var(--clr-black);
-        }
-        .btn-primary:hover {
-            background-color: var(--clr-gray);
-            border-color: var(--clr-gray);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--clr-black);
-            border: 1px solid var(--clr-black);
-        }
-        .btn-secondary:hover {
-            background-color: var(--clr-black);
-            color: var(--clr-white);
-        }
-
-        /* Horizontal Scroll Sliders */
-        .slider-wrapper {
-            position: relative;
-            width: 100%;
-        }
-        .slider-container {
-            display: flex;
-            gap: var(--spacing-md);
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: var(--spacing-lg);
-            cursor: grab;
-        }
-        .slider-container:active { cursor: grabbing; }
-        .slider-container::-webkit-scrollbar { display: none; }
-        .slider-container { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Scroll Progress Indicator */
-        .scroll-indicator-track {
-            width: 100%;
-            height: 2px;
-            background-color: var(--clr-light-gray);
-            margin-top: var(--spacing-md);
-            position: relative;
-        }
-        .scroll-indicator-bar {
-            height: 100%;
-            background-color: var(--clr-black);
-            width: 20%; /* Will be updated via JS */
-            position: absolute;
-            left: 0;
-            top: 0;
-            transition: width 0.1s ease-out;
-        }
-
-        /* Product Cards */
-        .product-card {
-            flex: 0 0 85%; /* Mobile width */
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-            transition: var(--transition-smooth);
-            user-select: none;
-        }
-        @media (min-width: 768px) { .product-card { flex: 0 0 40%; } }
-        @media (min-width: 1024px) { .product-card { flex: 0 0 25%; } }
-
-        .product-image-wrapper {
-            position: relative;
-            aspect-ratio: 3/4;
-            overflow: hidden;
-            background-color: var(--clr-beige);
-            margin-bottom: var(--spacing-md);
-        }
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
-        }
-        .product-card:hover .product-image { transform: scale(1.05); }
-        
-        .product-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .product-title {
-            font-size: 1rem;
-            font-weight: 400;
-        }
-        .product-price {
-            font-size: 0.875rem;
-            color: var(--clr-gray);
-        }
-
-        /* Category Card */
-        .category-card {
-            flex: 0 0 70%;
-            scroll-snap-align: start;
-            position: relative;
-            aspect-ratio: 1/1;
-            overflow: hidden;
-        }
-        @media (min-width: 768px) { .category-card { flex: 0 0 33.333%; } }
-        
-        .category-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
-        }
-        .category-card:hover .category-image { transform: scale(1.05); }
-        .category-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-            display: flex;
-            align-items: flex-end;
-            padding: var(--spacing-lg);
-        }
-        .category-title {
-            color: var(--clr-white);
-            font-size: 1.5rem;
-        }
-
-        /* ==========================================================================
-           5. SECTIONS
-           ========================================================================== */
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 85vh;
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0,0,0,0.3);
-            z-index: -1;
-        }
-        .hero-content {
-            text-align: center;
-            color: var(--clr-white);
-            max-width: 800px;
-            padding: var(--spacing-md);
-        }
-        .hero-subtitle {
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: var(--spacing-md);
-            display: block;
-        }
-        .hero-title {
-            margin-bottom: var(--spacing-lg);
-            line-height: 1.1;
-        }
-
-        /* Story / Philosophy Section */
-        .story-section {
-            background-color: var(--clr-beige);
-        }
-        .story-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--spacing-xl);
-            align-items: center;
-        }
-        @media (min-width: 768px) {
-            .story-grid { grid-template-columns: 1fr 1fr; }
-        }
-        .story-image {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 4/5;
-            object-fit: cover;
-        }
-        .story-content {
-            padding: 0 var(--spacing-md);
-        }
-        .section-header { margin-bottom: var(--spacing-lg); }
-
-        /* Trust Icons */
-        .trust-section {
-            border-top: 1px solid var(--clr-light-gray);
-            border-bottom: 1px solid var(--clr-light-gray);
-            padding: var(--spacing-lg) 0;
-        }
-        .trust-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-lg);
-            text-align: center;
-        }
-        @media (min-width: 768px) {
-            .trust-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-        .trust-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-sm);
-            transition: var(--transition-smooth);
-        }
-        .trust-item:hover { transform: translateY(-5px); }
-        .trust-icon { font-size: 2rem; color: var(--clr-black); }
-
-        /* Newsletter Section */
-        .newsletter-section {
-            background-color: var(--clr-white);
-            text-align: center;
-        }
-        .newsletter-form {
-            max-width: 500px;
-            margin: var(--spacing-lg) auto 0;
-            display: flex;
-            border-bottom: 1px solid var(--clr-black);
-            padding-bottom: 8px;
-            position: relative;
-        }
-        .newsletter-form::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background-color: var(--clr-gray);
-            transition: width 0.4s ease;
-        }
-        .newsletter-form:focus-within::after { width: 100%; }
-        
-        .newsletter-input {
-            flex-grow: 1;
-            border: none;
-            outline: none;
-            background: transparent;
-            font-size: 1rem;
-            padding: 8px 0;
-            font-family: var(--font-sans);
-        }
-        .newsletter-btn {
-            padding: 8px;
-            font-size: 1.25rem;
-            transition: transform 0.3s ease;
-        }
-        .newsletter-btn:hover { transform: translateX(5px); }
-
-        /* ==========================================================================
-           6. FOOTER
-           ========================================================================== */
-        .footer {
-            background-color: var(--clr-black);
-            color: var(--clr-white);
-            padding-top: var(--spacing-xl);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
-        }
-        @media (min-width: 768px) {
-            .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
-        }
-
-        .footer-brand { margin-bottom: var(--spacing-lg); }
-        .footer-brand p { color: var(--clr-gray); margin-top: var(--spacing-md); max-width: 300px; }
-
-        /* Footer Accordion (Mobile) & Grid (Desktop) */
-        .footer-col h4 {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: var(--spacing-md);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-        @media (min-width: 768px) {
-            .footer-col h4 { cursor: default; }
-            .footer-col h4 .ph { display: none; } /* Hide icons on desktop */
-        }
-
-        .footer-links {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-        }
-        @media (min-width: 768px) {
-            .footer-links { max-height: none !important; }
-        }
-        
-        .footer-col.active .footer-links { max-height: 300px; } /* Mobile open state */
-        .footer-col.active h4 .ph-plus { display: none; }
-        .footer-col:not(.active) h4 .ph-minus { display: none; }
-
-        .footer-links a, .footer-links p {
-            color: var(--clr-gray);
-            font-size: 0.875rem;
-            transition: color 0.3s ease;
-        }
-        .footer-links a:hover { color: var(--clr-white); }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255,
-padding: var(--spacing-md) 0;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: var(--clr-gray);
-        }
-        @media (min-width: 768px) {
-            .footer-bottom { flex-direction: row; }
-        }
-        .footer-bottom-links {
-            display: flex;
-            gap: var(--spacing-md);
-        }
-        .footer-bottom-links a:hover { color: var(--clr-white); }
-        
-        .lang-selector {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        .lang-selector:hover { color: var(--clr-white); }
+        /* Glassmorphism */
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
     </style>
 </head>
-<body>
+<body class="font-sans bg-premium-50 text-premium-900 overflow-x-hidden selection:bg-premium-900 selection:text-white">
 
-    <!-- Custom Toast Notification -->
-    <div id="toast-container">Message appears here</div>
-
-    <!-- Announcement Bar -->
-    <div class="announcement-bar">
-        Complimentary Global Shipping on Orders Over $500
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 z-[100] bg-white flex items-center justify-center">
+        <h1 class="font-serif text-3xl tracking-widest animate-pulse">THE-LIT</h1>
     </div>
 
-    <!-- Sticky Header -->
-    <header class="header" id="main-header">
-        <div class="container header-inner">
-            <div class="header-left">
-                <button class="icon-btn" id="open-menu" aria-label="Open Menu">
-                    <i class="ph ph-list"></i>
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-40 glass transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Hamburger Menu -->
+            <button id="menu-btn" class="p-2 -ml-2 hover:bg-premium-100 rounded-full transition-colors z-50">
+                <i class="ph ph-list text-2xl"></i>
+            </button>
+
+            <!-- Logo -->
+            <a href="#" onclick="showHome(event)" class="absolute left-1/2 -translate-x-1/2 font-serif text-2xl tracking-[0.2em] uppercase font-semibold">
+                The-Lit
+            </a>
+
+            <!-- Right Icons -->
+            <div class="flex items-center space-x-4">
+                <button class="p-2 hover:bg-premium-100 rounded-full transition-colors hidden sm:block">
+                    <i class="ph ph-magnifying-glass text-xl"></i>
                 </button>
-            </div>
-            <div class="header-center">
-                <a href="#" class="logo serif uppercase">Aura</a>
-            </div>
-            <div class="header-right">
-                <button class="icon-btn" aria-label="Search" onclick="showToast('Search functionality coming soon.')">
-                    <i class="ph ph-magnifying-glass"></i>
-                </button>
-                <button class="icon-btn" aria-label="Cart" onclick="showToast('Your cart is empty.')">
-                    <i class="ph ph-shopping-bag"></i>
+                <button id="cart-btn" class="p-2 -mr-2 hover:bg-premium-100 rounded-full transition-colors relative">
+                    <i class="ph ph-shopping-bag text-xl"></i>
+                    <span id="cart-badge" class="absolute top-1 right-1 bg-premium-900 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Full Screen Mobile Menu -->
-    <nav class="mobile-menu" id="mobile-menu">
-        <div class="menu-header">
-            <button class="icon-btn" id="close-menu" aria-label="Close Menu">
-                <i class="ph ph-x"></i>
+    <!-- Full Screen Navigation Menu -->
+    <nav id="mobile-menu" class="fixed inset-0 bg-white z-50 translate-x-full transition-transform duration-500 ease-in-out flex flex-col">
+        <div class="px-6 h-20 flex items-center justify-between border-b border-gray-100">
+            <span class="font-serif text-xl tracking-widest">MENU</span>
+            <button id="close-menu-btn" class="p-2 -mr-2 hover:bg-premium-100 rounded-full transition-colors">
+                <i class="ph ph-x text-2xl"></i>
             </button>
         </div>
-        <div class="menu-content">
-            <ul class="menu-links sans uppercase">
-                <li class="menu-item">
-                    <div class="menu-link-wrapper" onclick="closeMenuAndScroll('#hero')">
-                        <span>Home</span>
-                    </div>
-                </li>
-                <li class="menu-item">
-                    <div class="menu-link-wrapper" onclick="toggleSubmenu(this)">
-                        Shop <i class="ph ph-caret-right"></i>
-                    </div>
-                    <ul class="submenu">
-                        <li><a href="#new-arrivals" onclick="closeMenu()">New Arrivals</a></li>
-                        <li><a href="#categories" onclick="closeMenu()">Ready to Wear</a></li>
-                        <li><a href="#" onclick="showToast('Navigating to Accessories'); closeMenu()">Accessories</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <div class="menu-link-wrapper" onclick="toggleSubmenu(this)">
-                        Collections <i class="ph ph-caret-right"></i>
-                    </div>
-                    <ul class="submenu">
-                        <li><a href="#" onclick="showToast('Loading Fall/Winter'); closeMenu()">Fall/Winter 24</a></li>
-                        <li><a href="#" onclick="showToast('Loading Spring/Summer'); closeMenu()">Spring/Summer 24</a></li>
-                        <li><a href="#" onclick="showToast('Loading Essentials'); closeMenu()">The Essentials</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <div class="menu-link-wrapper" onclick="closeMenuAndScroll('#our-story')">
-                        <span>Our Story</span>
-                    </div>
-                </li>
-            </ul>
-
-            <div class="menu-footer">
-                <div class="menu-footer-links">
-                    <a href="#" onclick="showToast('Opening Account Login'); closeMenu()">My Account</a>
-                    <a href="#" onclick="showToast('Opening Order Tracker'); closeMenu()">Track Order</a>
-                    <div class="lang-selector" style="margin-top: 10px;" onclick="showToast('Location selector opened'); closeMenu()">
-                        <i class="ph ph-globe"></i> United States (USD $)
-                    </div>
-                </div>
-                <div class="social-icons">
-                    <a href="#" class="icon-btn"><i class="ph ph-instagram-logo"></i></a>
-                    <a href="#" class="icon-btn"><i class="ph ph-tiktok-logo"></i></a>
-                    <a href="#" class="icon-btn"><i class="ph ph-linkedin-logo"></i></a>
-                </div>
+        <div class="flex-1 overflow-y-auto p-8 flex flex-col justify-center space-y-8 text-2xl font-serif">
+            <a href="#" onclick="showHome(event); closeMenu()" class="hover:text-gray-500 transition-colors nav-link">Home</a>
+            <a href="#shop" onclick="showHome(event); closeMenu()" class="hover:text-gray-500 transition-colors nav-link">Shop Collection</a>
+            <a href="#story" onclick="showHome(event); closeMenu()" class="hover:text-gray-500 transition-colors nav-link">Our Story</a>
+            <a href="#academy" onclick="showHome(event); closeMenu()" class="hover:text-gray-500 transition-colors nav-link">The-Lit Academy</a>
+            
+            <div class="pt-8 border-t border-gray-100 flex flex-col space-y-4 text-base font-sans">
+                <a href="https://www.instagram.com/thelitfoundation?igsh=dGNkcXlxaWV6aXVq" target="_blank" class="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
+                    <i class="ph ph-instagram-logo text-xl"></i> <span>Instagram</span>
+                </a>
+                <a href="https://wa.me/917756810120" target="_blank" class="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
+                    <i class="ph ph-whatsapp-logo text-xl"></i> <span>WhatsApp Support</span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="hero" class="hero">
-            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" alt="Fashion Model" class="hero-bg">
-            <div class="hero-overlay"></div>
-            <div class="hero-content fade-in-up animate-on-scroll">
-                <span class="hero-subtitle sans">The New Standard</span>
-                <h1 class="hero-title serif text-4xl">Elevated Essentials for the Modern Wardrobe.</h1>
-                <button class="btn btn-primary" onclick="document.getElementById('new-arrivals').scrollIntoView({behavior: 'smooth'})">Explore Collection</button>
+    <!-- Cart Drawer -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-[55] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white z-[60] translate-x-full transition-transform duration-500 ease-in-out flex flex-col shadow-2xl">
+        <div class="px-6 h-20 flex items-center justify-between border-b border-gray-100 bg-white">
+            <span class="font-serif text-xl tracking-widest">YOUR CART</span>
+            <button id="close-cart-btn" class="p-2 -mr-2 hover:bg-premium-100 rounded-full transition-colors">
+                <i class="ph ph-x text-2xl"></i>
+            </button>
+        </div>
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-6">
+            <!-- Cart items will be injected here -->
+        </div>
+        <div class="p-6 border-t border-gray-100 bg-premium-50">
+            <div class="flex justify-between items-center mb-4 text-lg font-medium">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">₹0</span>
             </div>
-        </section>
+            <p class="text-xs text-gray-500 mb-6">Taxes and shipping calculated at checkout.</p>
+            <button onclick="openCheckoutModal('cart')" class="w-full bg-premium-900 text-white py-4 tracking-widest text-sm font-medium hover:bg-black transition-colors">
+                CHECKOUT SECURELY
+            </button>
+        </div>
+    </div>
 
-        <!-- Product Showcase (Horizontal Slider) -->
-        <section id="new-arrivals" class="section-padding container">
-            <div class="section-header flex flex-col items-center text-center fade-in-up animate-on-scroll" style="margin-bottom: var(--spacing-lg);">
-                <h2 class="serif text-2xl mb-2">New Arrivals</h2>
-                <a href="#" class="sans text-sm uppercase" style="border-bottom: 1px solid var(--clr-black); padding-bottom: 2px;" onclick="showToast('Loading all products...')">View All</a>
-            </div>
+    <!-- MAIN CONTENT AREA (Swaps between Home and Product View) -->
+    <main id="main-content" class="pt-20">
+        
+        <!-- HOME VIEW -->
+        <div id="home-view">
+            <!-- Hero Section -->
+            <section class="relative h-[85vh] w-full overflow-hidden fade-in">
+                <img src="https://img.sanishtech.com/u/af11f19531ceb8275a2e8d5020294e2b.png" alt="New Collection Hero" class="absolute inset-0 w-full h-full object-cover transform scale-105 animate-[kenburns_20s_ease-out_forwards]">
+                <div class="absolute inset-0 bg-black/40"></div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
+                    <span class="tracking-[0.3em] text-sm uppercase mb-4 opacity-90 fade-up" style="transition-delay: 0.2s">Signature Series</span>
+                    <h1 class="font-serif text-5xl md:text-7xl mb-8 tracking-wide fade-up" style="transition-delay: 0.4s">NEW COLLECTION</h1>
+                    <button onclick="document.getElementById('shop').scrollIntoView({behavior: 'smooth'})" class="px-10 py-4 bg-white text-black text-sm tracking-widest font-medium hover:bg-transparent hover:text-white hover:border-white border border-transparent transition-all duration-300 fade-up" style="transition-delay: 0.6s">
+                        DISCOVER NOW
+                    </button>
+                </div>
+            </section>
 
-            <div class="slider-wrapper fade-in-up animate-on-scroll">
-                <!-- Data attributes used by JS to identify corresponding indicator -->
-                <div class="slider-container" id="product-slider" data-indicator="product-indicator">
-                    
-                    <!-- Product Card 1 -->
-                    <div class="product-card" onclick="showToast('Viewing Cashmere Blend Coat')">
-                        <div class="product-image-wrapper">
-                            <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=1887&auto=format&fit=crop" alt="Cashmere Coat" class="product-image" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title serif">The Cashmere Blend Coat</h3>
-                            <span class="product-price sans">$895</span>
-                        </div>
+            <!-- Philosophy Mini-bar -->
+            <section class="border-b border-gray-100 bg-white py-6">
+                <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-gray-100">
+                    <div class="flex items-center justify-center space-x-3 py-2 fade-up">
+                        <i class="ph ph-sparkle text-xl text-gray-400"></i>
+                        <span class="text-xs tracking-widest text-gray-600 uppercase">Premium Quality</span>
                     </div>
-
-                    <!-- Product Card 2 -->
-                    <div class="product-card" onclick="showToast('Viewing Silk Slip Dress')">
-                        <div class="product-image-wrapper">
-                            <img src="https://images.unsplash.com/photo-1515347619152-16b110b4226a?q=80&w=2070&auto=format&fit=crop" alt="Silk Dress" class="product-image" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title serif">Signature Silk Slip</h3>
-                            <span class="product-price sans">$450</span>
-                        </div>
+                    <div class="flex items-center justify-center space-x-3 py-2 fade-up" style="transition-delay: 0.1s">
+                        <i class="ph ph-t-shirt text-xl text-gray-400"></i>
+                        <span class="text-xs tracking-widest text-gray-600 uppercase">Exclusive Designs</span>
                     </div>
-
-                    <!-- Product Card 3 -->
-                    <div class="product-card" onclick="showToast('Viewing Structured Blazer')">
-                        <div class="product-image-wrapper">
-                            <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=1887&auto=format&fit=crop" alt="Blazer" class="product-image" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title serif">Tailored Wool Blazer</h3>
-                            <span class="product-price sans">$620</span>
-                        </div>
+                    <div class="flex items-center justify-center space-x-3 py-2 fade-up" style="transition-delay: 0.2s">
+                        <i class="ph ph-package text-xl text-gray-400"></i>
+                        <span class="text-xs tracking-widest text-gray-600 uppercase">Secure Shipping</span>
                     </div>
+                </div>
+            </section>
 
-                    <!-- Product Card 4 -->
-                    <div class="product-card" onclick="showToast('Viewing Leather Tote')">
-                        <div class="product-image-wrapper">
-                            <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1915&auto=format&fit=crop" alt="Leather Bag" class="product-image" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title serif">Minimalist Leather Tote</h3>
-                            <span class="product-price sans">$550</span>
-                        </div>
+            <!-- Products Grid Section -->
+            <section id="shop" class="py-24 max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16 fade-up">
+                    <h2 class="font-serif text-3xl md:text-4xl mb-4 tracking-wider">The Essentials</h2>
+                    <div class="w-12 h-px bg-gray-300 mx-auto"></div>
+                </div>
+
+                <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Products dynamically injected here via JS -->
+                </div>
+            </section>
+
+            <!-- Category Slider -->
+            <section class="py-20 bg-white overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6 mb-12 fade-up">
+                    <h2 class="font-serif text-3xl tracking-wider">Explore Collections</h2>
+                </div>
+                <div class="flex overflow-x-auto hide-scrollbar space-x-6 px-6 pb-8 max-w-7xl mx-auto snap-x fade-up">
+                    <div class="min-w-[280px] md:min-w-[350px] aspect-[4/5] relative group overflow-hidden cursor-pointer snap-center rounded-2xl">
+                        <img src="https://img.sanishtech.com/u/89a245ebb7058040f13f6dadb238d88b.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <h3 class="absolute bottom-8 left-8 text-white font-serif text-2xl tracking-widest">STREET</h3>
                     </div>
-                    
-                     <!-- Product Card 5 -->
-                     <div class="product-card" onclick="showToast('Viewing Pleated Trousers')">
-                        <div class="product-image-wrapper">
-                            <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1887&auto=format&fit=crop" alt="Trousers" class="product-image" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title serif">Wide Leg Pleated Trouser</h3>
-                            <span class="product-price sans">$380</span>
-                        </div>
+                    <div class="min-w-[280px] md:min-w-[350px] aspect-[4/5] relative group overflow-hidden cursor-pointer snap-center rounded-2xl">
+                        <img src="https://img.sanishtech.com/u/2b7283be27293077f74522611aea5ee6.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <h3 class="absolute bottom-8 left-8 text-white font-serif text-2xl tracking-widest">CLASSIC</h3>
                     </div>
-
-                </div>
-                <!-- Dynamic Scroll Indicator -->
-                <div class="scroll-indicator-track">
-                    <div class="scroll-indicator-bar" id="product-indicator"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Our Story / Philosophy -->
-        <section id="our-story" class="story-section section-padding">
-            <div class="container story-grid">
-                <div class="story-image-wrapper fade-in-up animate-on-scroll">
-                    <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop" alt="Atelier" class="story-image" loading="lazy">
-                </div>
-                <div class="story-content fade-in-up animate-on-scroll" style="transition-delay: 0.2s;">
-                    <span class="sans text-xs uppercase" style="color: var(--clr-gray); display: block; margin-bottom: var(--spacing-sm);">Philosophy</span>
-                    <h2 class="serif text-4xl" style="margin-bottom: var(--spacing-md); line-height: 1.2;">Artistry in Every Thread.</h2>
-                    <p class="sans" style="margin-bottom: var(--spacing-lg); color: var(--clr-gray);">
-                        We believe that true luxury lies in subtlety and exceptional craftsmanship. Every piece in our collection is thoughtfully designed to transcend seasons, created using ethically sourced materials and constructed by master artisans. It is not just clothing; it is an extension of your persona.
-                    </p>
-                    <button class="btn btn-secondary" onclick="showToast('Navigating to full story page...')">Discover Our Atelier</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Categories Slider -->
-        <section id="categories" class="section-padding container">
-            <div class="section-header fade-in-up animate-on-scroll">
-                <h2 class="serif text-2xl text-center">Curated Collections</h2>
-            </div>
-            
-            <div class="slider-wrapper fade-in-up animate-on-scroll">
-                <div class="slider-container" id="category-slider" data-indicator="category-indicator">
-                    
-                    <div class="category-card" onclick="showToast('Loading Outerwear Collection')">
-                        <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1935&auto=format&fit=crop" alt="Outerwear" class="category-image" loading="lazy">
-                        <div class="category-overlay">
-                            <h3 class="category-title serif">Outerwear</h3>
-                        </div>
+                    <div class="min-w-[280px] md:min-w-[350px] aspect-[4/5] relative group overflow-hidden cursor-pointer snap-center rounded-2xl">
+                        <img src="https://img.sanishtech.com/u/241ab6ec7f3780462ced95764c78223e.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <h3 class="absolute bottom-8 left-8 text-white font-serif text-2xl tracking-widest">URBAN</h3>
                     </div>
-
-                    <div class="category-card" onclick="showToast('Loading Knitwear Collection')">
-                        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1972&auto=format&fit=crop" alt="Knitwear" class="category-image" loading="lazy">
-                        <div class="category-overlay">
-                            <h3 class="category-title serif">Knitwear</h3>
-                        </div>
+                    <div class="min-w-[280px] md:min-w-[350px] aspect-[4/5] relative group overflow-hidden cursor-pointer snap-center rounded-2xl">
+                        <img src="https://img.sanishtech.com/u/a4944e7150e3ecaa4efd06fae422f7ca.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <h3 class="absolute bottom-8 left-8 text-white font-serif text-2xl tracking-widest">SPORTS</h3>
                     </div>
-
-                    <div class="category-card" onclick="showToast('Loading Accessories')">
-                        <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1915&auto=format&fit=crop" alt="Accessories" class="category-image" loading="lazy">
-                        <div class="category-overlay">
-                            <h3 class="category-title serif">Accessories</h3>
-                        </div>
+                </div>
+            </section>
+          <!-- Our Story & Academy -->
+            <section id="story" class="py-24 bg-premium-100">
+                <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <div class="order-2 md:order-1 relative aspect-square rounded-full overflow-hidden fade-up p-8">
+                        <div class="absolute inset-0 border border-gray-300 rounded-full scale-95"></div>
+                        <img src="https://img.sanishtech.com/u/241ab6ec7f3780462ced95764c78223e.png" class="w-full h-full object-cover rounded-full" alt="Our Story">
                     </div>
-                    
+                    <div class="order-1 md:order-2 fade-up">
+                        <span class="text-xs tracking-widest text-gray-500 uppercase mb-4 block">The Heritage</span>
+                        <h2 class="font-serif text-4xl mb-6">Redefining Everyday Luxury.</h2>
+                        <p class="text-gray-600 mb-8 leading-relaxed font-light">
+                            Born from a passion for minimalist design and uncompromising quality, The-Lit creates apparel that speaks louder than logos. We believe in the power of the perfect fit and the comfort of premium fabrics.
+                        </p>
+                        <a href="#shop" class="inline-flex items-center space-x-2 text-sm tracking-widest uppercase font-medium border-b border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-colors">
+                            <span>Read Full Story</span>
+                            <i class="ph ph-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="scroll-indicator-track">
-                    <div class="scroll-indicator-bar" id="category-indicator"></div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Trust Icons Section -->
-        <section class="trust-section">
-            <div class="container trust-grid">
-                <div class="trust-item fade-in-up animate-on-scroll">
-                    <i class="ph ph-globe-hemisphere-west trust-icon"></i>
-                    <h4 class="sans text-sm uppercase">Global Shipping</h4>
-                    <p class="sans text-xs" style="color: var(--clr-gray);">Complimentary over $500</p>
-                </div>
-                <div class="trust-item fade-in-up animate-on-scroll" style="transition-delay: 0.1s;">
-                    <i class="ph ph-arrow-u-up-left trust-icon"></i>
-                    <h4 class="sans text-sm uppercase">Free Returns</h4>
-                    <p class="sans text-xs" style="color: var(--clr-gray);">Within 30 days</p>
-                </div>
-                <div class="trust-item fade-in-up animate-on-scroll" style="transition-delay: 0.2s;">
-                    <i class="ph ph-leaf trust-icon"></i>
-                    <h4 class="sans text-sm uppercase">Sustainable</h4>
-                    <p class="sans text-xs" style="color: var(--clr-gray);">Ethically sourced</p>
-                </div>
-                <div class="trust-item fade-in-up animate-on-scroll" style="transition-delay: 0.3s;">
-                    <i class="ph ph-package trust-icon"></i>
-                    <h4 class="sans text-sm uppercase">Bespoke Packaging</h4>
-                    <p class="sans text-xs" style="color: var(--clr-gray);">Signature presentation</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Newsletter Section -->
-        <section class="newsletter-section section-padding container fade-in-up animate-on-scroll">
-            <h2 class="serif text-2xl mb-2">Join The Inner Circle</h2>
-            <p class="sans text-sm" style="color: var(--clr-gray); margin-bottom: var(--spacing-lg);">Subscribe to receive updates, access to exclusive deals, and more.</p>
-            
-            <form class="newsletter-form" id="newsletter-form">
-                <input type="email" placeholder="Enter your email address" class="newsletter-input" required aria-label="Email address">
-                <button type="submit" class="newsletter-btn" aria-label="Subscribe">
-                    <i class="ph ph-arrow-right"></i>
+            <section id="academy" class="py-24 max-w-7xl mx-auto px-6 text-center fade-up">
+                <i class="ph ph-books text-4xl mb-6 text-gray-400"></i>
+                <h2 class="font-serif text-3xl mb-6">The-Lit Academy</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+                    Join our community to learn about sustainable fashion, styling tips, and the craftsmanship behind our premium collections. Elevate your wardrobe knowledge.
+                </p>
+                <button class="px-8 py-3 border border-black text-sm tracking-widest uppercase hover:bg-black hover:text-white transition-colors">
+                    Join the Community
                 </button>
-            </form>
-        </section>
+            </section>
+
+            <!-- Before Footer Image Section -->
+            <section class="w-full h-[60vh] relative mt-12 fade-in">
+                <img src="https://img.sanishtech.com/u/55affe48b90b7335d2011ff545b6d5f9.png" alt="Lifestyle" class="absolute inset-0 w-full h-full object-cover filter brightness-[0.85]">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <h2 class="text-white font-serif text-4xl md:text-5xl tracking-widest uppercase text-center drop-shadow-lg fade-up">Elevate Your Presence</h2>
+                </div>
+            </section>
+        </div>
+
+        <!-- PRODUCT DETAIL VIEW (Hidden by default) -->
+        <div id="product-view" class="hidden min-h-screen pb-24 max-w-7xl mx-auto px-6 pt-12">
+            <!-- Breadcrumb -->
+            <div class="text-xs tracking-widest uppercase text-gray-500 mb-8 cursor-pointer hover:text-black flex items-center space-x-2 w-max" onclick="showHome(event)">
+                <i class="ph ph-arrow-left"></i>
+                <span>Back to Shop</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+                <!-- Product Image -->
+                <div class="relative group rounded-3xl overflow-hidden shadow-sm bg-white p-4 fade-up">
+                    <img id="detail-img" src="" alt="Product" class="w-full aspect-square object-cover rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]">
+                </div>
+
+                <!-- Product Info -->
+                <div class="flex flex-col justify-center fade-up" style="transition-delay: 0.2s">
+                    <h1 id="detail-name" class="font-serif text-4xl lg:text-5xl mb-4 text-premium-900"></h1>
+                    <p id="detail-price" class="text-2xl font-medium mb-6 text-gray-700"></p>
+                    
+                    <div class="w-full h-px bg-gradient-to-r from-gray-200 to-transparent mb-8"></div>
+
+                    <p id="detail-desc" class="text-gray-600 font-light leading-relaxed mb-8">
+                        Experience ultimate comfort and style with our premium 3-jersey combo. Crafted with precision for the modern individual.
+                    </p>
+
+                    <div class="mb-10">
+                        <span class="block text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3">Quantity</span>
+                        <div class="flex items-center border border-gray-300 w-max rounded-full overflow-hidden">
+                            <button onclick="changeDetailQty(-1)" class="px-5 py-2 hover:bg-gray-100 transition-colors">-</button>
+                            <span id="detail-qty" class="px-4 w-12 text-center text-sm font-medium">1</span>
+                            <button onclick="changeDetailQty(1)" class="px-5 py-2 hover:bg-gray-100 transition-colors">+</button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button id="btn-add-cart" class="flex-1 py-4 border border-black text-black font-medium tracking-widest text-sm uppercase hover:bg-black hover:text-white transition-colors rounded-full">
+                            Add to Cart
+                        </button>
+                        <button id="btn-buy-now" class="flex-1 py-4 bg-premium-900 text-white font-medium tracking-widest text-sm uppercase hover:bg-black transition-colors shadow-lg shadow-black/20 rounded-full">
+                            Buy Now
+                        </button>
+                    </div>
+       <div class="mt-12 space-y-4 text-sm text-gray-500 border-t border-gray-100 pt-8">
+                        <div class="flex items-center space-x-3"><i class="ph ph-truck text-lg"></i> <span>Free shipping on all orders</span></div>
+                        <div class="flex items-center space-x-3"><i class="ph ph-arrow-u-up-left text-lg"></i> <span>30-day return policy</span></div>
+                        <div class="flex items-center space-x-3"><i class="ph ph-shield-check text-lg"></i> <span>Secure checkout guaranteed</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            <div class="mt-32 border-t border-gray-100 pt-16 fade-up">
+                <h3 class="font-serif text-2xl text-center mb-12">You May Also Like</h3>
+                <div id="related-products" class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <!-- Brand Info -->
-                <div class="footer-brand">
-                    <a href="#" class="logo serif uppercase text-xl text-white" style="color: var(--clr-white);">Aura</a>
-                    <p class="sans text-sm">Defining modern luxury through minimalist design and uncompromising quality.</p>
-                </div>
-                  <!-- Accordion/Grid Columns -->
-                <div class="footer-col" onclick="toggleFooterAccordion(this)">
-                    <h4 class="sans">Shop <i class="ph ph-plus"></i><i class="ph ph-minus"></i></h4>
-                    <div class="footer-links">
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">New Arrivals</a>
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Ready to Wear</a>
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Accessories</a>
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Gift Cards</a>
+    <footer class="bg-premium-900 text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-1">
+                    <h3 class="font-serif text-2xl tracking-widest uppercase mb-6">The-Lit</h3>
+                    <p class="text-gray-400 text-sm font-light leading-relaxed mb-6">
+                        Premium apparel designed for the modern minimalist. Quality over quantity, always.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/thelitfoundation?igsh=dGNkcXlxaWV6aXVq" target="_blank" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                            <i class="ph ph-instagram-logo text-xl"></i>
+                        </a>
+                        <a href="https://wa.me/917756810120" target="_blank" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                            <i class="ph ph-whatsapp-logo text-xl"></i>
+                        </a>
                     </div>
                 </div>
 
-                <div class="footer-col" onclick="toggleFooterAccordion(this)">
-                    <h4 class="sans">Explore <i class="ph ph-plus"></i><i class="ph ph-minus"></i></h4>
-                    <div class="footer-links">
-                        <a href="#" onclick="event.stopPropagation(); document.getElementById('our-story').scrollIntoView({behavior: 'smooth'})">Our Story</a>
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Sustainability</a>
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Journal</a>
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Careers</a>
-                    </div>
+                <!-- Links 1 -->
+                <div>
+                    <h4 class="text-xs font-semibold tracking-widest uppercase mb-6 text-gray-300">Shop</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-light">
+                        <li><a href="#" class="hover:text-white transition-colors">All Products</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">New Arrivals</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Best Sellers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Combo Packs</a></li>
+                    </ul>
                 </div>
 
-                <div class="footer-col" onclick="toggleFooterAccordion(this)">
-                    <h4 class="sans">Support <i class="ph ph-plus"></i><i class="ph ph-minus"></i></h4>
-                    <div class="footer-links">
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">FAQ</a>
-                        <a href="#" onclick="event.stopPropagation(); showToast('Navigating...')">Shipping & Returns</a>
-                        <!-- Clickable contact links -->
-                        <a href="mailto:concierge@aurastudios.com" onclick="event.stopPropagation();">concierge@aurastudios.com</a>
-                        <a href="tel:+18005550199" onclick="event.stopPropagation();">+1 800 555 0199</a>
-                    </div>
+                <!-- Links 2 -->
+                <div>
+                    <h4 class="text-xs font-semibold tracking-widest uppercase mb-6 text-gray-300">Help</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-light">
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Shipping & Returns</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Track Order</a></li>
+                        <li><a href="https://wa.me/917756810120" target="_blank" class="hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-xs font-semibold tracking-widest uppercase mb-6 text-gray-300">Newsletter</h4>
+                    <p class="text-gray-400 text-sm font-light mb-4">Subscribe to receive updates, access to exclusive deals, and more.</p>
+                    <form onsubmit="event.preventDefault(); alert('Subscribed successfully!');" class="flex border-b border-gray-600 focus-within:border-white transition-colors pb-2">
+                        <input type="email" placeholder="Enter your email" required class="bg-transparent w-full text-sm outline-none text-white placeholder-gray-500">
+                        <button type="submit" class="text-xs tracking-widest uppercase hover:text-gray-300 transition-colors">Subscribe</button>
+                    </form>
                 </div>
             </div>
-
-            <div class="footer-bottom">
-                <div class="lang-selector" onclick="showToast('Language & Region settings opened.')">
-                    <i class="ph ph-globe"></i> EN / USD
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-light">
+                <p>&copy; 2024 The-Lit. All rights reserved.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
                 </div>
-                <div class="footer-bottom-links">
-                    <a href="#" onclick="showToast('Terms opened')">Terms</a>
-                    <a href="#" onclick="showToast('Privacy Policy opened')">Privacy</a>
-                    <a href="#" onclick="showToast('Cookies policy opened')">Cookies</a>
-                </div>
-                <p>&copy; 2024 Aura Studios. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript Interactions -->
+    <!-- Checkout Modal (Formspree) -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black/60 z-[70] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl scale-95 transition-transform duration-300" id="checkout-box">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-serif text-xl">Secure Checkout</h3>
+                <button onclick="closeCheckoutModal()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6 sm:p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                
+                <div id="checkout-summary" class="mb-6 p-4 bg-premium-50 rounded-xl text-sm border border-gray-100">
+                    <!-- Order summary injected here -->
+                </div>
+
+                <form id="checkout-form" action="https://formspree.io/f/xpqynony" method="POST" class="space-y-4">
+                    <input type="hidden" name="_subject" value="New Order Received! 🚀">
+                    <input type="hidden" name="Order_Details" id="form-order-details" value="">
+                    <input type="hidden" name="Total_Amount" id="form-total-amount" value="">
+                    
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Full Name</label>
+                        <input type="text" name="Name" required class="w-full border-b border-gray-300 px-0 py-2 outline-none focus:border-black transition-colors bg-transparent">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Email</label>
+                            <input type="email" name="Email" required class="w-full border-b border-gray-300 px-0 py-2 outline-none focus:border-black transition-colors bg-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Phone</label>
+                            <input type="tel" name="Phone" required class="w-full border-b border-gray-300 px-0 py-2 outline-none focus:border-black transition-colors bg-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Complete Address</label>
+                        <textarea name="Address" rows="3" required class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:border-black transition-colors bg-transparent mt-1"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-premium-900 text-white py-4 rounded-full tracking-widest text-sm font-medium hover:bg-black transition-colors mt-6 shadow-lg shadow-black/10">
+                        CONFIRM ORDER (Cash on Delivery)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-3 rounded-full text-sm tracking-wide shadow-2xl z-[80] translate-y-20 opacity-0 transition-all duration-300 flex items-center space-x-2">
+        <i class="ph ph-check-circle text-lg text-green-400"></i>
+        <span id="toast-msg">Added to cart</span>
+    </div>
+
+    <!-- JavaScript Logic -->
     <script>
-        // ==========================================
-        // UI Utility: Custom Toast Message
-        // ==========================================
-        function showToast(message) {
-            const toast = document.getElementById('toast-container');
-            toast.textContent = message;
-            toast.classList.add('show');
-            
-            // Remove after 3 seconds
+        // Data: 8 Products
+        const products = [
+            { id: 1, name: 'The-Lit Trio Pack', price: 999, img: 'https://img.sanishtech.com/u/2b7283be27293077f74522611aea5ee6.jpg', desc: 'A premium combination of 3 high-quality jerseys designed for exceptional comfort and a sleek minimalist aesthetic. Perfect for daily wear.' },
+            { id: 2, name: 'The-Lit Elite Combo', price: 999, img: 'https://img.sanishtech.com/u/241ab6ec7f3780462ced95764c78223e.png', desc: 'Elevate your wardrobe with the Elite Combo. Three meticulously crafted jerseys offering unparalleled fit and breathability.' },
+            { id: 3, name: 'The-Lit Street Pack', price: 999, img: 'https://img.sanishtech.com/u/89a245ebb7058040f13f6dadb238d88b.jpg', desc: 'Urban-inspired essentials. The Street Pack includes 3 durable, stylish jerseys that effortlessly blend into the modern cityscape.' },
+            { id: 4, name: 'The-Lit Pro Bundle', price: 999, img: 'https://img.sanishtech.com/u/a4944e7150e3ecaa4efd06fae422f7ca.png', desc: 'Designed for active lifestyles. The Pro Bundle features 3 performance-focused jerseys that do not compromise on premium looks.' },
+            { id: 5, name: 'The-Lit Summer Combo', price: 999, img: 'https://img.sanishtech.com/u/2b7283be27293077f74522611aea5ee6.jpg', desc: 'Lightweight, breathable, and ultra-soft. The Summer Combo ensures you stay cool and stylish with 3 essential seasonal colors.' },
+            { id: 6, name: 'The-Lit Classic Trio', price: 999, img: 'https://img.sanishtech.com/u/241ab6ec7f3780462ced95764c78223e.png', desc: 'Timeless design meets modern comfort. 3 classic jerseys that form the foundation of any sophisticated casual wardrobe.' },
+            { id: 7, name: 'The-Lit Urban Pack', price: 999, img: 'https://img.sanishtech.com/u/89a245ebb7058040f13f6dadb238d88b.jpg', desc: 'Contemporary cuts and subtle detailing. The Urban Pack brings you 3 versatile jerseys ready for day-to-night transitions.' },
+            { id: 8, name: 'The-Lit Premium Set', price: 999, img: 'https://img.sanishtech.com/u/a4944e7150e3ecaa4efd06fae422f7ca.png', desc: 'Our signature collection. The Premium Set includes 3 luxuriously soft jerseys that define The-Lit standard of excellence.' }
+        ];
+
+        // State
+        let cart = JSON.parse(localStorage.getItem('thelit_cart')) || [];
+        let currentActiveProduct = null;
+        let detailQty = 1;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            // Remove Loader
             setTimeout(() => {
-                toast.classList.remove('show');
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+            }, 1000);
+
+            renderHomeProducts();
+            updateCartUI();
+            setupScrollAnimations();
+            
+            // Event Listeners
+            document.getElementById('menu-btn').addEventListener('click', openMenu);
+            document.getElementById('close-menu-btn').addEventListener('click', closeMenu);
+            document.getElementById('cart-btn').addEventListener('click', openCart);
+            document.getElementById('close-cart-btn').addEventListener('click', closeCart);
+            document.getElementById('cart-overlay').addEventListener('click', closeCart);
+            
+            // Header scroll effect
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 50) {
+                    nav.classList.add('shadow-sm');
+                    nav.classList.replace('h-20', 'h-16');
+                } else {
+                    nav.classList.remove('shadow-sm');
+                    nav.classList.replace('h-16', 'h-20');
+                }
+            });
+        });
+
+              // Format Currency
+        const formatPrice = (price) => `₹${price}`;
+
+        // Render Home Products Grid
+        function renderHomeProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = products.map((product, index) => `
+                <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-xl transition-all duration-500 hover:-translate-y-2 fade-up cursor-pointer" style="transition-delay: ${index * 0.1}s">
+                    <div class="relative overflow-hidden" onclick="openProductDetail(${product.id})">
+                        <img src="${product.img}" alt="${product.name}" class="w-full aspect-square object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold tracking-wider">Combo</div>
+                    </div>
+                    <div class="p-6 relative bg-white">
+                        <div class="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <h3 class="font-serif text-lg mb-1" onclick="openProductDetail(${product.id})">${product.name}</h3>
+                        <p class="text-gray-500 text-sm font-medium mb-5">${formatPrice(product.price)}</p>
+                        
+                        <div class="flex items-center space-x-2">
+                            <button onclick="addToCart(${product.id}, 1); event.stopPropagation();" class="w-12 h-12 flex items-center justify-center rounded-full border border-gray-200 hover:border-black hover:bg-black hover:text-white transition-colors text-gray-600">
+                                <i class="ph ph-shopping-cart text-lg"></i>
+                            </button>
+                            <button onclick="openCheckoutModal('single', ${product.id}); event.stopPropagation();" class="flex-1 h-12 bg-premium-100 text-black text-xs tracking-widest uppercase font-semibold rounded-full hover:bg-premium-900 hover:text-white transition-colors">
+                                Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+                  // Re-trigger observer for new elements
+            setupScrollAnimations();
+        }
+
+        // Navigation / Routing
+        function showHome(e) {
+            if(e) e.preventDefault();
+            document.getElementById('product-view').classList.add('hidden');
+            document.getElementById('home-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setupScrollAnimations();
+        }
+
+        function openProductDetail(id) {
+            const product = products.find(p => p.id === id);
+            if(!product) return;
+            
+            currentActiveProduct = product;
+            detailQty = 1;
+            
+            // Populate Details
+            document.getElementById('detail-img').src = product.img;
+            document.getElementById('detail-name').innerText = product.name;
+            document.getElementById('detail-price').innerText = formatPrice(product.price);
+            document.getElementById('detail-desc').innerText = product.desc;
+            document.getElementById('detail-qty').innerText = detailQty;
+            
+            // Setup Buttons
+            const btnAdd = document.getElementById('btn-add-cart');
+            const btnBuy = document.getElementById('btn-buy-now');
+            
+            btnAdd.onclick = () => addToCart(product.id, detailQty);
+            btnBuy.onclick = () => openCheckoutModal('single', product.id, detailQty);
+
+            // Render Related (Pick 3 random)
+            const related = [...products].sort(() => 0.5 - Math.random()).slice(0, 3);
+            document.getElementById('related-products').innerHTML = related.map(p => `
+                <div class="group cursor-pointer text-center" onclick="openProductDetail(${p.id})">
+                    <div class="rounded-2xl overflow-hidden mb-4 shadow-sm">
+                        <img src="${p.img}" class="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <h4 class="font-serif text-lg">${p.name}</h4>
+                    <p class="text-sm text-gray-500 mt-1">${formatPrice(p.price)}</p>
+                </div>
+            `).join('');
+
+            // Switch Views
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('product-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function changeDetailQty(amount) {
+            detailQty += amount;
+            if(detailQty < 1) detailQty = 1;
+            document.getElementById('detail-qty').innerText = detailQty;
+        }
+
+        // Menu & Cart Drawer
+        function openMenu() { document.getElementById('mobile-menu').classList.remove('translate-x-full'); }
+        function closeMenu() { document.getElementById('mobile-menu').classList.add('translate-x-full'); }
+        
+        function openCart() {
+            document.getElementById('cart-drawer').classList.remove('translate-x-full');
+            document.getElementById('cart-overlay').classList.remove('opacity-0', 'pointer-events-none');
+        }
+        function closeCart() {
+            document.getElementById('cart-drawer').classList.add('translate-x-full');
+            document.getElementById('cart-overlay').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Cart Logic
+        function addToCart(productId, quantity = 1) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if(existingItem) {
+                existingItem.qty += quantity;
+            } else {
+                cart.push({ ...product, qty: quantity });
+            }
+            
+            saveCart();
+            updateCartUI();
+            showToast('Added to cart!');
+            
+            // Add cart pop animation
+            const badge = document.getElementById('cart-badge');
+            badge.classList.add('scale-150');
+            setTimeout(() => badge.classList.remove('scale-150'), 300);
+        }
+
+        function updateCartQty(productId, newQty) {
+            if(newQty < 1) {
+                removeFromCart(productId);
+                return;
+            }
+            const item = cart.find(i => i.id === productId);
+            if(item) {
+                item.qty = newQty;
+                saveCart();
+                updateCartUI();
+            }
+        }
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function saveCart() {
+            localStorage.setItem('thelit_cart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('cart-badge');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            
+            // Badge
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            if(totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            // Items
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="text-center text-gray-500 mt-10"><i class="ph ph-shopping-bag text-4xl mb-3"></i><p>Your cart is empty.</p><button onclick="closeCart(); showHome()" class="mt-4 text-sm border-b border-black pb-1 hover:text-black">Continue Shopping</button></div>`;
+                subtotalEl.innerText = '₹0';
+                return;
+            }
+
+            let subtotal = 0;
+            container.innerHTML = cart.map(item => {
+                subtotal += item.price * item.qty;
+                return `
+                <div class="flex items-center gap-4 bg-white p-3 rounded-2xl border border-gray-100">
+                    <img src="${item.img}" class="w-20 h-20 aspect-square object-cover rounded-xl">
+                    <div class="flex-1">
+                        <h4 class="font-serif text-sm line-clamp-1">${item.name}</h4>
+                        <p class="text-gray-500 text-xs mt-1 mb-2">${formatPrice(item.price)}</p>
+                        <div class="flex items-center border border-gray-200 w-max rounded-lg overflow-hidden">
+                            <button onclick="updateCartQty(${item.id}, ${item.qty - 1})" class="px-3 py-1 hover:bg-gray-100 text-xs">-</button>
+                            <span class="px-3 text-xs">${item.qty}</span>
+                            <button onclick="updateCartQty(${item.id}, ${item.qty + 1})" class="px-3 py-1 hover:bg-gray-100 text-xs">+</button>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" class="p-2 text-gray-400 hover:text-red-500 transition-colors">
+                        <i class="ph ph-trash"></i>
+                    </button>
+                </div>
+                `;
+            }).join('');
+            
+            subtotalEl.innerText = formatPrice(subtotal);
+        }
+
+        // Toast Notification
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
             }, 3000);
         }
 
-        // ==========================================
-        // Mobile Menu Logic
-        // ==========================================
-        const menuBtn = document.getElementById('open-menu');
-        const closeBtn = document.getElementById('close-menu');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        function openMenu() {
-            mobileMenu.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        }
-
-        function closeMenu() {
-            mobileMenu.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function closeMenuAndScroll(targetId) {
-            closeMenu();
-            setTimeout(() => {
-                const target = document.querySelector(targetId);
-                if(target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 400); // Wait for menu close animation
-        }
-
-        menuBtn.addEventListener('click', openMenu);
-        closeBtn.addEventListener('click', closeMenu);
-
-        // Submenu Toggle within Mobile Menu
-        function toggleSubmenu(element) {
-            const parentItem = element.closest('.menu-item');
-            const submenu = parentItem.querySelector('.submenu');
+        // Checkout System
+        function openCheckoutModal(mode, singleProductId = null, qty = 1) {
+            const modal = document.getElementById('checkout-modal');
+            const box = document.getElementById('checkout-box');
+            const summaryContainer = document.getElementById('checkout-summary');
+            const orderDetailsInput = document.getElementById('form-order-details');
+            const totalAmountInput = document.getElementById('form-total-amount');
             
-            // Close other open submenus
-            document.querySelectorAll('.menu-item.active').forEach(item => {
-                if (item !== parentItem) {
-                    item.classList.remove('active');
-                    item.querySelector('.submenu').style.maxHeight = null;
-                }
-            });
+            closeCart(); // close cart if open
 
-            // Toggle current
-            parentItem.classList.toggle('active');
-            if (parentItem.classList.contains('active')) {
-                submenu.style.maxHeight = submenu.scrollHeight + "px";
+            let orderItems = [];
+            let total = 0;
+            let summaryHTML = '';
+
+            if (mode === 'single') {
+                const product = products.find(p => p.id === singleProductId);
+                total = product.price * qty;
+                orderItems.push(`${qty}x ${product.name} (₹${product.price})`);
+                summaryHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-gray-800">${product.name}</span>
+                        <span class="text-gray-600">Qty: ${qty}</span>
+                    </div>
+                    <div class="flex justify-between items-center font-bold text-black border-t border-gray-200 pt-2 mt-2">
+                        <span>Total to Pay:</span>
+                        <span>${formatPrice(total)}</span>
+                    </div>
+                `;
             } else {
-                submenu.style.maxHeight = null;
+                // Cart mode
+                if(cart.length === 0) { showToast('Cart is empty!'); return; }
+                cart.forEach(item => {
+                    total += item.price * item.qty;
+                    orderItems.push(`${item.qty}x ${item.name} (₹${item.price})`);
+                    summaryHTML += `
+                        <div class="flex justify-between items-center mb-1 text-xs">
+                            <span class="text-gray-600">${item.qty}x ${item.name}</span>
+                            <span class="text-gray-800">${formatPrice(item.price * item.qty)}</span>
+                        </div>
+                    `;
+                });
+                summaryHTML += `
+                    <div class="flex justify-between items-center font-bold text-black border-t border-gray-200 pt-2 mt-2 text-sm">
+                        <span>Total to Pay:</span>
+                        <span>${formatPrice(total)}</span>
+                    </div>
+                `;
             }
+
+            // Populate Form hidden fields for Formspree
+            summaryContainer.innerHTML = summaryHTML;
+            orderDetailsInput.value = orderItems.join('\n');
+            totalAmountInput.value = `₹${total}`;
+                // Show Modal
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => box.classList.remove('scale-95'), 50);
         }
 
-        // ==========================================
-        // Sticky Header Effect
-        // ==========================================
-        const header = document.getElementById('main-header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // ==========================================
-        // Scroll Animations (Intersection Observer)
-        // ==========================================
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.15
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target); // Only animate once
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
-
-        // ==========================================
-        // Footer Accordion (Mobile Only)
-        // ==========================================
-        function toggleFooterAccordion(col) {
-            if (window.innerWidth >= 768) return; // Disable on desktop
-            
-            // Close others
-            document.querySelectorAll('.footer-col').forEach(c => {
-                if (c !== col) c.classList.remove('active');
-            });
-            
-            col.classList.toggle('active');
+        function closeCheckoutModal() {
+            const modal = document.getElementById('checkout-modal');
+            const box = document.getElementById('checkout-box');
+            box.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('opacity-0', 'pointer-events-none'), 300);
         }
-        
-        // ==========================================
-        // Slider Drag & Scroll Indicator Logic
-        // ==========================================
-        const sliders = document.querySelectorAll('.slider-container');
 
-        sliders.forEach(slider => {
-            // Update indicator bar
-            const indicatorId = slider.getAttribute('data-indicator');
-            const indicatorBar = document.getElementById(indicatorId);
-
-            const updateIndicator = () => {
-                // Calculate percentage scrolled
-                const scrollLeft = slider.scrollLeft;
-                const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
-                let scrollPercent = (scrollLeft / maxScrollLeft) * 100;
-                
-                // Adjust width of bar. Base width is proportional to visible area.
-                const visibleRatio = slider.clientWidth / slider.scrollWidth;
-                const baseWidthPercent = visibleRatio * 100;
-                
-                // Map scroll percent to available track width
-                const availableTrackPercent = 100 - baseWidthPercent;
-                const translatePercent = (scrollPercent / 100) * availableTrackPercent;
-                
-                indicatorBar.style.width = `${baseWidthPercent}%`;
-                indicatorBar.style.transform = `translateX(${translatePercent * (100 / baseWidthPercent)}%)`;
-            };
-
-            // Init and bind scroll event
-            updateIndicator();
-            slider.addEventListener('scroll', updateIndicator);
-            window.addEventListener('resize', updateIndicator);
-
-            // Desktop Drag to Scroll logic
-            let isDown = false;
-            let startX;
-            let scrollLeft;
-            let isDragging = false; // Flag to differentiate drag vs click
-
-            slider.addEventListener('mousedown', (e) => {
-                isDown = true;
-                isDragging = false;
-                slider.style.cursor = 'grabbing';
-                // Remove snap during drag for smooth experience
-                slider.style.scrollSnapType = 'none';
-                startX = e.pageX - slider.offsetLeft;
-                scrollLeft = slider.scrollLeft;
-            });
-
-            slider.addEventListener('mouseleave', () => {
-                isDown = false;
-                slider.style.cursor = 'grab';
-                slider.style.scrollSnapType = 'x mandatory';
-            });
-
-            slider.addEventListener('mouseup', () => {
-                isDown = false;
-                slider.style.cursor = 'grab';
-                slider.style.scrollSnapType = 'x mandatory';
-            });
-
-            slider.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - slider.offsetLeft;
-                const walk = (x - startX) * 2; // Scroll speed multiplier
-                if (Math.abs(walk) > 5) isDragging = true; // Mark as dragging if moved significantly
-                slider.scrollLeft = scrollLeft - walk;
-            });
-
-            // Prevent firing click events on cards if user was dragging
-            const cards = slider.querySelectorAll('.product-card, .category-card');
-            cards.forEach(card => {
-                card.addEventListener('click', (e) => {
-                    if (isDragging) {
-                        e.preventDefault();
-                        e.stopPropagation();
+        // Scroll Animations using Intersection Observer
+        function setupScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Optional: Unobserve after animation if we only want it once
+                        // observer.unobserve(entry.target);
                     }
-                }, true); // Use capture phase
-            });
-        });
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
-        // ==========================================
-        // Newsletter Form Submit
-        // ==========================================
-        document.getElementById('newsletter-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = e.target.querySelector('input').value;
-            if(email) {
-                showToast(`Thank you! ${email} has been added to our list.`);
-                e.target.reset();
-            }
-        });
+            document.querySelectorAll('.fade-up, .fade-in').forEach(el => observer.observe(el));
+        }
+
+        // Initialize empty Cart text if needed on startup
+        if(cart.length === 0) updateCartUI();
 
     </script>
 </body>
